@@ -20,11 +20,11 @@ const router = Router();
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/CustomerDto'
+ *                 $ref: '#/components/schemas/CustomerResponseDto'
  *       500:
  *         description: Error interno del servidor
  */
-router.get('/', authenticate, CustomerController.getCustomers);
+router.get('/', CustomerController.getCustomers);
 
 /**
  * @swagger
@@ -44,13 +44,13 @@ router.get('/', authenticate, CustomerController.getCustomers);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/CustomerDto'
+ *               $ref: '#/components/schemas/CustomerResponseDto'
  *       400:
  *         description: Datos inválidos
  *       500:
  *         description: Error interno del servidor
  */
-router.post('/', authenticate, validateDto(CreateCustomerDto), CustomerController.createCustomer);
+router.post('/', validateDto(CreateCustomerDto), CustomerController.createCustomer);
 
 /**
  * @swagger
@@ -71,13 +71,13 @@ router.post('/', authenticate, validateDto(CreateCustomerDto), CustomerControlle
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/CustomerDto'
+ *               $ref: '#/components/schemas/CustomerResponseDto'
  *       404:
  *         description: Cliente no encontrado
  *       500:
  *         description: Error interno del servidor
  */
-router.get('/:id_customer', authenticate, CustomerController.getCustomerById);
+router.get('/:id_customer', CustomerController.getCustomerById);
 
 /**
  * @swagger
@@ -104,13 +104,13 @@ router.get('/:id_customer', authenticate, CustomerController.getCustomerById);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/CustomerDto'
+ *               $ref: '#/components/schemas/CustomerResponseDto'
  *       404:
  *         description: Cliente no encontrado
  *       500:
  *         description: Error interno del servidor
  */
-router.put('/:id_customer', authenticate, validateDto(UpdateCustomerDto), CustomerController.updateCustomer);
+router.put('/:id_customer', validateDto(UpdateCustomerDto), CustomerController.updateCustomer);
 
 /**
  * @swagger
@@ -141,6 +141,6 @@ router.put('/:id_customer', authenticate, validateDto(UpdateCustomerDto), Custom
  *       500:
  *         description: Error interno del servidor
  */
-router.delete('/:id_customer', authenticate, CustomerController.deleteCustomer);
+router.delete('/:id_customer', CustomerController.deleteCustomer);
 
 export default router;

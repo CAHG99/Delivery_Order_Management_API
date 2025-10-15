@@ -8,14 +8,14 @@
  *  - Validate and type the objects that go into the controllers.
  *  - Avoid directly exposing the database models.
  */
-import { IsEmail, IsEnum, IsNotEmpty, MinLength } from 'class-validator';
+import { IsEmail, IsEnum, IsNotEmpty, MinLength, IsString } from 'class-validator';
 import { UserRole } from '../models/user.model';
 
 /**
  * Data Transfer Object for seller registration.
  *
  * @property {string} username - Unique username for login.
- * @property {string} password - Seller password (will be encrypted).
+ * @property {string} password - Unique password (will be encrypted).
  * @property {string} email - Unique email address of the seller.
  * @property {UserRole} role - Role of the user (e.g., 'seller', 'admin').
  */
@@ -23,6 +23,9 @@ import { UserRole } from '../models/user.model';
 export class RegisterDto {
   @IsNotEmpty()
   username!: string;
+
+  @IsString()
+  name!: string;
 
   @IsEmail()
   email!: string;
@@ -54,7 +57,7 @@ export class LoginDto {
  * Data Transfer Object for authentication response.
  *
  * @property {string} token - JWT token for authenticated requests.
- * @property {object} seller - Seller information without sensitive data.
+ * @property {object} user - User information without sensitive data.
  * @property {string} message - Success message.
  *
  */
@@ -63,6 +66,7 @@ export interface AuthResponseDto {
   message: string;
   user: {
     id_user: number;
+    name: string;
     username: string;
     email: string;
     role: UserRole;
@@ -77,14 +81,6 @@ export interface AuthResponseDto {
  * @property {string} email - Email address.
  *
  */
-
-export interface UserProfileDto {
-  id_user: number;
-  access_id: number;
-  email: string;
-  username: string;
-  role: UserRole;
-}
 
 /**
  * ErrorResponseDto

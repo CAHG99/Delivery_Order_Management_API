@@ -20,7 +20,7 @@ const router = Router();
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/AddressDto'
+ *                 $ref: '#/components/schemas/AddressResponseDto'
  *       500:
  *         description: Error interno del servidor
  */
@@ -52,13 +52,13 @@ router.get('/', AddressController.getAddresses);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/AddressDto'
+ *               $ref: '#/components/schemas/AddressResponseDto'
  *       400:
  *         description: Datos inválidos
  *       500:
  *         description: Error interno del servidor
  */
-router.post('/', authenticate, validateDto(CreateAddressDto), AddressController.createAddress);
+router.post('/', validateDto(CreateAddressDto), AddressController.createAddress);
 
 /**
  * @swagger
@@ -79,13 +79,13 @@ router.post('/', authenticate, validateDto(CreateAddressDto), AddressController.
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/AddressDto'
+ *               $ref: '#/components/schemas/AddressResponseDto'
  *       404:
  *         description: Dirección no encontrada
  *       500:
  *         description: Error interno del servidor
  */
-router.get('/:id_address', authenticate, AddressController.getAddressById);
+router.get('/:id_address', AddressController.getAddressById);
 
 /**
  * @swagger
@@ -112,13 +112,13 @@ router.get('/:id_address', authenticate, AddressController.getAddressById);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/AddressDto'
+ *               $ref: '#/components/schemas/AddressResponseDto'
  *       404:
  *         description: Dirección no encontrada
  *       500:
  *         description: Error interno del servidor
  */
-router.put('/:id_address', authenticate, validateDto(UpdateAddressDto), AddressController.updateAddress);
+router.put('/:id_address', validateDto(UpdateAddressDto), AddressController.updateAddress);
 
 /**
  * @swagger
@@ -149,7 +149,7 @@ router.put('/:id_address', authenticate, validateDto(UpdateAddressDto), AddressC
  *       500:
  *         description: Error interno del servidor
  */
-router.delete('/:id_address', authenticate, AddressController.deleteAddress);
+router.delete('/:id_address', AddressController.deleteAddress);
 
 /**
  * @swagger
@@ -181,7 +181,7 @@ router.delete('/:id_address', authenticate, AddressController.deleteAddress);
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/AddressDto'
+ *                 $ref: '#/components/schemas/AddressResponseDto'
  *       500:
  *         description: Error interno del servidor
  */

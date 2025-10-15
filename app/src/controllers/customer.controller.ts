@@ -109,3 +109,4 @@ export const searchCustomers = async (req: Request, res: Response): Promise<Resp
     return res.status(500).json({ error: error.message });
   }
 };
+

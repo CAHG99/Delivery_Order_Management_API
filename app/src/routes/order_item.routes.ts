@@ -8,7 +8,7 @@ const router = Router();
 
 /**
  * @swagger
- * /order_items:
+ * /orderitems:
  *   get:
  *     summary: Obtener lista de todos los ítems de órdenes
  *     tags: [OrderItems]
@@ -20,15 +20,15 @@ const router = Router();
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/OrderItemDto'
+ *                 $ref: '#/components/schemas/OrderItemResponseDto'
  *       500:
  *         description: Error interno del servidor
  */
-router.get('/', authenticate, OrderItemController.getOrderItems);
+router.get('/', OrderItemController.getOrderItems);
 
 /**
  * @swagger
- * /order_items:
+ * /orderitems:
  *   post:
  *     summary: Crear un nuevo ítem de orden
  *     tags: [OrderItems]
@@ -44,17 +44,17 @@ router.get('/', authenticate, OrderItemController.getOrderItems);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/OrderItemDto'
+ *               $ref: '#/components/schemas/OrderItemResponseDto'
  *       400:
  *         description: Datos inválidos
  *       500:
  *         description: Error interno del servidor
  */
-router.post('/', authenticate, validateDto(CreateOrderItemDto), OrderItemController.createOrderItem);
+router.post('/', validateDto(CreateOrderItemDto), OrderItemController.createOrderItem);
 
 /**
  * @swagger
- * /order_items/{id_order_item}:
+ * /orderitems/{id_order_item}:
  *   get:
  *     summary: Obtener ítem de orden por ID
  *     tags: [OrderItems]
@@ -71,17 +71,17 @@ router.post('/', authenticate, validateDto(CreateOrderItemDto), OrderItemControl
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/OrderItemDto'
+ *               $ref: '#/components/schemas/OrderItemResponseDto'
  *       404:
  *         description: Ítem no encontrado
  *       500:
  *         description: Error interno del servidor
  */
-router.get('/:id_order_item', authenticate, OrderItemController.getOrderItemById);
+router.get('/:id_order_item', OrderItemController.getOrderItemById);
 
 /**
  * @swagger
- * /order_items/{id_order_item}:
+ * /orderitems/{id_order_item}:
  *   put:
  *     summary: Actualizar ítem de orden existente
  *     tags: [OrderItems]
@@ -104,17 +104,17 @@ router.get('/:id_order_item', authenticate, OrderItemController.getOrderItemById
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/OrderItemDto'
+ *               $ref: '#/components/schemas/OrderItemResponseDto'
  *       404:
  *         description: Ítem no encontrado
  *       500:
  *         description: Error interno del servidor
  */
-router.put('/:id_order_item', authenticate, validateDto(UpdateOrderItemDto), OrderItemController.updateOrderItem);
+router.put('/:id_order_item', validateDto(UpdateOrderItemDto), OrderItemController.updateOrderItem);
 
 /**
  * @swagger
- * /order_items/{id_order_item}:
+ * /orderitems/{id_orderitem}:
  *   delete:
  *     summary: Eliminar ítem de orden (soft delete)
  *     tags: [OrderItems]
@@ -141,6 +141,6 @@ router.put('/:id_order_item', authenticate, validateDto(UpdateOrderItemDto), Ord
  *       500:
  *         description: Error interno del servidor
  */
-router.delete('/:id_order_item', authenticate, OrderItemController.deleteOrderItem);
+router.delete('/:id_order_item', OrderItemController.deleteOrderItem);
 
 export default router;

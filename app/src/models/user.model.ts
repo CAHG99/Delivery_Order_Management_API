@@ -10,6 +10,7 @@ export enum UserRole {
 // Interfaz de atributos del usuario
 interface UserAttributes {
   id_user: number;
+  username: string;
   name: string;
   email: string;
   password: string;
@@ -26,6 +27,7 @@ interface UserCreationAttributes
 class User extends Model<UserAttributes, UserCreationAttributes> 
   implements UserAttributes {
   public id_user!: number;
+  public username!: string;
   public name!: string;
   public email!: string;
   public password!: string;
@@ -47,6 +49,11 @@ User.init(
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
+    },
+    username: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+      unique: true,
     },
     name: {
       type: DataTypes.STRING(100),

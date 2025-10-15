@@ -1,6 +1,6 @@
-id_user,name,email,password,role,createdAt,updatedAt
-1,Carlos Méndez,carlos@empresa.com,$2b$10$abc123hashedpassword,admin,2025-01-10,2025-01-10
-2,Laura Ríos,laura@empresa.com,$2b$10$def456hashedpassword,analista,2025-01-10,2025-01-10
-3,Andrés Torres,andres@empresa.com,$2b$10$ghi789hashedpassword,analista,2025-01-10,2025-01-10
-4,María López,maria@empresa.com,$2b$10$jkl101hashedpassword,analista,2025-01-10,2025-01-10
-5,Pedro Gómez,pedro@empresa.com,$2b$10$mno112hashedpassword,analista,2025-01-10,2025-01-10
+id_user,username,name,email,password,role,createdAt,updatedAt
+1,caff,Carlos Méndez,carlos@empresa.com,$2b$10$abc123hashedpassword,admin,2025-01-10,2025-01-10
+2,laug,Laura Ríos,laura@empresa.com,$2b$10$def456hashedpassword,analista,2025-01-10,2025-01-10
+3,andre,Andrés Torres,andres@empresa.com,$2b$10$ghi789hashedpassword,analista,2025-01-10,2025-01-10
+4,mar,María López,maria@empresa.com,$2b$10$jkl101hashedpassword,analista,2025-01-10,2025-01-10
+5,peds,Pedro Gómez,pedro@empresa.com,$2b$10$mno112hashedpassword,analista,2025-01-10,2025-01-10

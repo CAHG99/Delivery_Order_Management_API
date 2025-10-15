@@ -25,7 +25,7 @@ app.use('/api/customers', customerRoutes);
 app.use('/api/addresses', addressRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
-app.use('/api/order-items', orderItemRoutes);
+app.use('/api/orderitems', orderItemRoutes);
 app.use('/api/bodegas', bodegaRoutes);
 
 

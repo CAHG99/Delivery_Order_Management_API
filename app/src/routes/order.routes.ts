@@ -20,11 +20,11 @@ const router = Router();
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/OrderDto'
+ *                 $ref: '#/components/schemas/OrderResponseDto'
  *       500:
  *         description: Error interno del servidor
  */
-router.get('/', authenticate, OrderController.getOrders);
+router.get('/', OrderController.getOrders);
 
 /**
  * @swagger
@@ -44,13 +44,13 @@ router.get('/', authenticate, OrderController.getOrders);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/OrderDto'
+ *               $ref: '#/components/schemas/OrderResponseDto'
  *       400:
  *         description: Datos inválidos
  *       500:
  *         description: Error interno del servidor
  */
-router.post('/', authenticate, validateDto(CreateOrderDto), OrderController.createOrder);
+router.post('/', validateDto(CreateOrderDto), OrderController.createOrder);
 
 /**
  * @swagger
@@ -71,13 +71,13 @@ router.post('/', authenticate, validateDto(CreateOrderDto), OrderController.crea
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/OrderDto'
+ *               $ref: '#/components/schemas/OrderResponseDto'
  *       404:
  *         description: Orden no encontrada
  *       500:
  *         description: Error interno del servidor
  */
-router.get('/:id_order', authenticate, OrderController.getOrderById);
+router.get('/:id_order', OrderController.getOrderById);
 
 /**
  * @swagger
@@ -110,7 +110,7 @@ router.get('/:id_order', authenticate, OrderController.getOrderById);
  *       500:
  *         description: Error interno del servidor
  */
-router.put('/:id_order', authenticate, validateDto(UpdateOrderDto), OrderController.updateOrder);
+router.put('/:id_order', validateDto(UpdateOrderDto), OrderController.updateOrder);
 
 /**
  * @swagger
@@ -141,6 +141,6 @@ router.put('/:id_order', authenticate, validateDto(UpdateOrderDto), OrderControl
  *       500:
  *         description: Error interno del servidor
  */
-router.delete('/:id_order', authenticate, OrderController.deleteOrder);
+router.delete('/:id_order', OrderController.deleteOrder);
 
 export default router;

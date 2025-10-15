@@ -20,7 +20,7 @@ const router = Router();
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/BodegaDto'
+ *                 $ref: '#/components/schemas/BodegaResponseDto'
  *       500:
  *         description: Error interno del servidor
  */
@@ -44,13 +44,13 @@ router.get('/', BodegaController.getBodegas);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/BodegaDto'
+ *               $ref: '#/components/schemas/BodegaResponseDto'
  *       400:
  *         description: Datos inválidos
  *       500:
  *         description: Error interno del servidor
  */
-router.post('/', authenticate, validateDto(CreateBodegaDto), BodegaController.createBodega);
+router.post('/', validateDto(CreateBodegaDto), BodegaController.createBodega);
 
 /**
  * @swagger
@@ -71,13 +71,13 @@ router.post('/', authenticate, validateDto(CreateBodegaDto), BodegaController.cr
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/BodegaDto'
+ *               $ref: '#/components/schemas/BodegaResponseDto'
  *       404:
  *         description: Bodega no encontrada
  *       500:
  *         description: Error interno del servidor
  */
-router.get('/:id_bodega', authenticate, BodegaController.getBodegaById);
+router.get('/:id_bodega', BodegaController.getBodegaById);
 
 /**
  * @swagger
@@ -104,13 +104,13 @@ router.get('/:id_bodega', authenticate, BodegaController.getBodegaById);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/BodegaDto'
+ *               $ref: '#/components/schemas/BodegaResponseDto'
  *       404:
  *         description: Bodega no encontrada
  *       500:
  *         description: Error interno del servidor
  */
-router.put('/:id_bodega', authenticate, validateDto(UpdateBodegaDto), BodegaController.updateBodega);
+router.put('/:id_bodega', validateDto(UpdateBodegaDto), BodegaController.updateBodega);
 
 /**
  * @swagger
@@ -141,7 +141,7 @@ router.put('/:id_bodega', authenticate, validateDto(UpdateBodegaDto), BodegaCont
  *       500:
  *         description: Error interno del servidor
  */
-router.delete('/:id_bodega', authenticate, BodegaController.deleteBodega);
+router.delete('/:id_bodega', BodegaController.deleteBodega);
 
 /**
  * @swagger
@@ -168,10 +168,10 @@ router.delete('/:id_bodega', authenticate, BodegaController.deleteBodega);
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/BodegaDto'
+ *                 $ref: '#/components/schemas/BodegaResponseDto'
  *       500:
  *         description: Error interno del servidor
  */
-router.get('/search', authenticate, BodegaController.searchBodegas);
+router.get('/search', BodegaController.searchBodegas);
 
 export default router;

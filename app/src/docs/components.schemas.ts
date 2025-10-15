@@ -1,15 +1,27 @@
 // Centralized Swagger schemas for the API
 export const swaggerSchemas = {
-  CreateUserDto: {
+  RegisterDto: {
     type: "object",
-    required: ["name", "email", "password"],
+    required: ["name", "email", "password", "username", "role"],
     properties: {
+      username: { type: "string", description: "Username of the user", example: "johndoe" },
       name: { type: "string", description: "Full name of the user", example: "John Doe" },
       email: { type: "string", format: "email", description: "Unique email address", example: "john@example.com" },
       password: { type: "string", description: "User password (will be hashed)", example: "mypassword123" },
-      role: { type: "string", description: "User role", example: "analista", enum: ["admin", "analista", "delivery"] }
+      role: { type: "string", description: "User role", example: "analista", enum: ["admin", "analista"] }
     }
   },
+  RegisterResponseDto: {
+    type: "object",
+    properties: {
+      id_user: { type: "integer", description: "Unique user ID", example: 1 },
+      username: { type: "string", description: "Username", example: "johndoe" },
+      name: { type: "string", description: "Full name of the user", example: "John Doe" },
+      email: { type: "string", format: "email", description: "User's email", example: "john@example.com" },
+      role: { type: "string", description: "User role", example: "analista" }
+    }
+  },
+
   UpdateUserDto: {
     type: "object",
     properties: {

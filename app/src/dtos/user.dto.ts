@@ -11,10 +11,11 @@
 
 // src/dto/user.dto.ts
 
-import { IsEmail, IsEnum, IsOptional, IsString, MinLength, IsDateString, IsInt } from 'class-validator';
+import { IsEmail, IsEnum, IsOptional, IsString, MinLength, IsDateString, IsInt, isString } from 'class-validator';
 
 /**
  * Data Transfer Object for creating an access record.
+ * @property {string} username - Unique username for login.
  * @property {string} name - Name of the user.
  * @property {string} email - Email of the user.
  * @property {string} password - Password of the user (hashed).
@@ -29,6 +30,9 @@ import { IsEmail, IsEnum, IsOptional, IsString, MinLength, IsDateString, IsInt }
  */
 
 export class CreateUserDto {
+    @IsString()
+    username!: string;
+
     @IsString()
     name!: string;
 
@@ -59,6 +63,7 @@ export class LoginUserDto {
 /**
  * Data Transfer Object for updating an access record.
  *
+ * @property {string} [username] - Unique username for login.
  * @property {string} name - Name of the user.
  * @property {string} email - Email of the user.
  * @property {string} password - Password of the user (hashed).
@@ -71,6 +76,10 @@ export class LoginUserDto {
  */
 
 export class UpdateUserDto {
+    @IsString()
+    @IsOptional()
+    username?: string;
+
     @IsString()
     @IsOptional()
     name?: string;
@@ -94,6 +103,7 @@ export class UpdateUserDto {
  * Data Transfer Object that represents the response of an access record.
  *
  * @property {number} id_user - Unique identifier of the user.
+ * @property {string} username - Unique username for login.
  * @property {string} name - Name of the user.
  * @property {string} email - Email of the user.
  * @property {string} password - Password of the user (hashed).
@@ -104,6 +114,7 @@ export class UpdateUserDto {
  * @example
  * const User response: UserResponseDto = {
  *  id_user: 1,
+ *  username: "ad3",
  *  name: "admin",
  *  email: admin@gmail.com
  *  role: "admin",
@@ -114,6 +125,9 @@ export class UpdateUserDto {
 export class UserResponseDto {
     @IsInt()
     id_user!: number;
+
+    @IsString()
+    username!: string;
 
     @IsString()
     name!: string;

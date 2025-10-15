@@ -20,11 +20,11 @@ const router = Router();
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/ProductDto'
+ *                 $ref: '#/components/schemas/ProductResponseDto'
  *       500:
  *         description: Error interno del servidor
  */
-router.get('/', authenticate, ProductController.getProducts);
+router.get('/', ProductController.getProducts);
 
 /**
  * @swagger
@@ -44,13 +44,13 @@ router.get('/', authenticate, ProductController.getProducts);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ProductDto'
+ *               $ref: '#/components/schemas/ProductResponseDto'
  *       400:
  *         description: Datos inválidos
  *       500:
  *         description: Error interno del servidor
  */
-router.post('/', authenticate, validateDto(CreateProductDto), ProductController.createProduct);
+router.post('/', validateDto(CreateProductDto), ProductController.createProduct);
 
 /**
  * @swagger
@@ -71,13 +71,13 @@ router.post('/', authenticate, validateDto(CreateProductDto), ProductController.
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ProductDto'
+ *               $ref: '#/components/schemas/ProductResponseDto'
  *       404:
  *         description: Producto no encontrado
  *       500:
  *         description: Error interno del servidor
  */
-router.get('/:id_product', authenticate, ProductController.getProductById);
+router.get('/:id_product', ProductController.getProductById);
 
 /**
  * @swagger
@@ -104,13 +104,13 @@ router.get('/:id_product', authenticate, ProductController.getProductById);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ProductDto'
+ *               $ref: '#/components/schemas/ProductResponseDto'
  *       404:
  *         description: Producto no encontrado
  *       500:
  *         description: Error interno del servidor
  */
-router.put('/:id_product', authenticate, validateDto(UpdateProductDto), ProductController.updateProduct);
+router.put('/:id_product', validateDto(UpdateProductDto), ProductController.updateProduct);
 
 /**
  * @swagger
@@ -141,6 +141,6 @@ router.put('/:id_product', authenticate, validateDto(UpdateProductDto), ProductC
  *       500:
  *         description: Error interno del servidor
  */
-router.delete('/:id_product', authenticate, ProductController.deleteProduct);
+router.delete('/:id_product', ProductController.deleteProduct);
 
 export default router;
