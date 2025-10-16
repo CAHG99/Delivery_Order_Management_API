@@ -11,7 +11,7 @@
 
 // src/dto/order.dto.ts
 
-import { IsEmail, IsEnum, IsOptional, IsString, MinLength, IsDateString, IsInt } from 'class-validator';
+import { IsEmail, IsEnum, IsOptional, IsString, MinLength, IsDateString, IsInt, IsBoolean } from 'class-validator';
 
 /**
  * Data Transfer Object for creating a order.
@@ -19,9 +19,17 @@ import { IsEmail, IsEnum, IsOptional, IsString, MinLength, IsDateString, IsInt }
  * @property {number} id_customer - ID of the customer placing the order.
  * @property {number} id_address - ID of the address for the order.
  * @property {number} id_bodega - ID of the bodega fulfilling the order.
- * @property {Date} CreationDate - Date when the order was created.
+ * @property {Date} creationDate - Date when the order was created.
  * @property {string} [status] - Status of the order (e.g., 'pending', 'in transit', 'delivered').
+ * @property {boolean} isActive - Status of the order.
  */
+
+export enum OrderStatus {
+  PENDING = 'pending',
+  IN_TRANSIT = 'in_transit',
+  DELIVERED = 'delivered'
+}
+
 export class CreateOrderDto {
     @IsInt()
     id_customer!: number;
@@ -33,11 +41,14 @@ export class CreateOrderDto {
     id_bodega!: number;
 
     @IsDateString()
-    CreationDate!: Date;
+    creationDate!: Date;
 
-    @IsEnum(['pending', 'in transit', 'delivered'])
+    @IsEnum(OrderStatus)
     @IsOptional()
-    status?: 'pending' | 'in transit' | 'delivered';
+    status?: OrderStatus;
+
+    @IsBoolean()
+    isActive!: boolean;
 }
 
 
@@ -47,8 +58,9 @@ export class CreateOrderDto {
  * @property {number} [id_customer] - ID of the customer placing the order.
  * @property {number} [id_address] - ID of the address for the order.
  * @property {number} [id_bodega] - ID of the bodega fulfilling the order.
- * @property {Date} [CreationDate] - Date when the order was created.
+ * @property {Date} [creationDate] - Date when the order was created.
  * @property {string} [status] - Status of the order (e.g., 'pending', 'in transit', 'delivered').
+ * @property {boolean} [isActive] - Status of the order.
  */
 export class UpdateOrderDto {
     @IsInt()
@@ -65,13 +77,15 @@ export class UpdateOrderDto {
 
     @IsDateString()
     @IsOptional()
-    CreationDate?: Date;
+    creationDate?: Date;
 
-    @IsEnum(['pending', 'in transit', 'delivered'])
+    @IsEnum(OrderStatus)
     @IsOptional()
-    status?: 'pending' | 'in transit' | 'delivered';
+    status?: OrderStatus;
+
+    @IsBoolean()
     @IsOptional()
-    stock?: number;
+    isActive?: boolean;
 }
 
 /**
@@ -81,8 +95,9 @@ export class UpdateOrderDto {
  * @property {number} id_customer - ID of the customer placing the order.
  * @property {number} id_address - ID of the address for the order.
  * @property {number} id_bodega - ID of the bodega fulfilling the order.
- * @property {Date} CreationDate - Date when the order was created.
+ * @property {Date} creationDate - Date when the order was created.
  * @property {string} [status] - Status of the order (e.g., 'pending', 'in transit', 'delivered').
+ * @property {boolean} isActive - Status of the order.
  */
 export class OrderResponseDto {
     @IsInt()
@@ -98,14 +113,26 @@ export class OrderResponseDto {
     id_bodega!: number;
 
     @IsDateString()
-    CreationDate!: Date;
+    creationDate!: Date;
 
-    @IsEnum(['pending', 'in transit', 'delivered'])
-    status!: 'pending' | 'in transit' | 'delivered';
+    @IsEnum(OrderStatus)
+    status!: OrderStatus;
+
+    @IsBoolean()
+    isActive!: boolean;
     
-    @IsDateString()
     createdAt!: Date;
-
-    @IsDateString()
     updatedAt!: Date;
+
+    constructor(order: any) {
+        this.id_order = order.id;
+        this.id_customer = order.id_customer;
+        this.id_address = order.id_address;
+        this.id_bodega = order.id_bodega;
+        this.creationDate = order.creationDate;
+        this.status = order.status;
+        this.isActive = order.isActive;
+        this.createdAt = order.createdAt;
+        this.updatedAt = order.updatedAt;
+    }
 }

@@ -1,6 +1,6 @@
-id_order,id_customer,id_address,id_bodega,CreationDate,status
-1,1,1,1,2025-10-01,pending
-2,3,2,2,2025-10-02,in transit
-3,4,3,3,2025-10-03,delivered
-4,5,4,4,2025-10-04,pending
-5,2,5,5,2025-10-05,in transit
+id_order,id_customer,id_address,id_bodega,CreationDate,status,isActive
+1,1,1,1,2025-10-01,pending,true
+2,3,2,2,2025-10-02,in transit,true
+3,4,3,3,2025-10-03,delivered,true
+4,5,4,4,2025-10-04,pending,true
+5,2,5,5,2025-10-05,in transit,true

@@ -6,6 +6,7 @@ interface AddressAttributes {
   id_address: number;
   id_customer: number;
   address: string;
+  isActive: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -16,6 +17,7 @@ class Address extends Model<AddressAttributes, AddressCreationAttributes> implem
   public id_address!: number;
   public id_customer!: number;
   public address!: string;
+  public isActive!: boolean;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -39,11 +41,16 @@ Address.init(
       type: DataTypes.STRING(255),
       allowNull: false,
     },
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
   },
   {
     sequelize,
     tableName: 'addresses',
     timestamps: true,
+    paranoid: false 
   }
 );
 

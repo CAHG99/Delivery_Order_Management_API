@@ -1,50 +1,36 @@
-// src/dao/CustomerDao.ts
-
 import Customer from '../models/customer.model';
-import { Op } from 'sequelize';
-import { CreateCustomerDto, UpdateCustomerDto } from '../dtos/customer.dto';
+import Address from '../models/address.model';
+import { CreateCustomerDto, UpdateCustomerDto, CustomerResponseDto } from '../dtos/customer.dto';
 
-class CustomerDao {
-  async create(data: CreateCustomerDto): Promise<Customer> {
-    return await Customer.create(data);
+export class CustomerDAO {
+  static async createCustomer(data: CreateCustomerDto): Promise<CustomerResponseDto> {
+    const customer = await Customer.create({ ...data, isActive: true });
+    return new CustomerResponseDto(customer);
   }
 
-  async findAll(): Promise<Customer[]> {
-    return await Customer.findAll();
+  static async findAll(): Promise<CustomerResponseDto[]> {
+    const customers = await Customer.findAll({ where: { isActive: true }, include: [Address] });
+    return customers.map((c) => new CustomerResponseDto(c));
   }
 
-  async findById(id_customer: number): Promise<Customer | null> {
-    return await Customer.findByPk(id_customer);
+  static async findById(id: number): Promise<CustomerResponseDto | null> {
+    const customer = await Customer.findByPk(id, { include: [Address] });
+    return customer && customer.isActive ? new CustomerResponseDto(customer) : null;
   }
 
-  async findByCedula(cedula: string): Promise<Customer | null> {
-    return await Customer.findOne({ where: { cedula } });
-  }
-
-  async update(id_customer: number, data: UpdateCustomerDto): Promise<Customer | null> {
-    const customer = await this.findById(id_customer);
-    if (!customer) return null;
+  static async updateCustomer(id_customer: number, data: UpdateCustomerDto): Promise<CustomerResponseDto | null> {
+    const customer = await Customer.findByPk(id_customer);
+    if (!customer || !customer.isActive) return null;
 
     await customer.update(data);
-    return customer;
+    return new CustomerResponseDto(customer);
   }
 
-  async delete(id_customer: number): Promise<boolean> {
-    const customer = await this.findById(id_customer);
-    if (!customer) return false;
+  static async softDelete(id: number): Promise<boolean> {
+    const customer = await Customer.findByPk(id);
+    if (!customer || !customer.isActive) return false;
 
-    await customer.destroy();
+    await customer.update({ isActive: false });
     return true;
   }
-
-  async search(filters: Partial<{ fullname: string; email: string }>): Promise<Customer[]> {
-    const where: any = {};
-
-    if (filters.fullname) where.fullname = { [Op.iLike]: `%${filters.fullname}%` };
-    if (filters.email) where.email = { [Op.iLike]: `%${filters.email}%` };
-
-    return await Customer.findAll({ where });
-  }
 }
-
-export default new CustomerDao();

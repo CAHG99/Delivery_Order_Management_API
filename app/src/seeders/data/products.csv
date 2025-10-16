@@ -1,6 +1,6 @@
-id_product,name,description,price,stock,createdAt,updatedAt
-1,Laptop Lenovo,Portatil 15 16GB RAM,3200000,10,2025-01-10,2025-01-10
-2,Mouse Logitech,Mouse inalambrico,75000,50,2025-01-10,2025-01-10
-3,Teclado Redragon,Teclado mecanico,220000,20,2025-01-10,2025-01-10
-4,Monitor Samsung 24,"Pantalla Full HD",780000,15,2025-01-10,2025-01-10
-5,Auriculares Sony,"Audifonos Bluetooth",250000,25,2025-01-10,2025-01-10
+id_product,name,description,price,stock,isActive,createdAt,updatedAt
+1,Laptop Lenovo,Portatil 15 16GB RAM,3200000,10,true,2025-01-10,2025-01-10
+2,Mouse Logitech,Mouse inalambrico,75000,50,true,2025-01-10,2025-01-10
+3,Teclado Redragon,Teclado mecanico,220000,20,true,2025-01-10,2025-01-10
+4,Monitor Samsung 24,"Pantalla Full HD",780000,15,true,2025-01-10,2025-01-10
+5,Auriculares Sony,"Audifonos Bluetooth",250000,25,true,2025-01-10,2025-01-10

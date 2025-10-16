@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import * as BodegaController from '../controllers/bodega.controller';
+import {BodegaController} from '../controllers/bodega.controller';
 import { validateDto } from '../middlewares/validateDto.middleware';
 import { authenticate } from '../middlewares/authenticate.middleware';
 import { CreateBodegaDto, UpdateBodegaDto } from '../dtos/bodega.dto';
@@ -20,11 +20,11 @@ const router = Router();
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/BodegaResponseDto'
+ *                 $ref: '#/components/schemas/BodegaDto'
  *       500:
  *         description: Error interno del servidor
  */
-router.get('/', BodegaController.getBodegas);
+router.get('/', BodegaController.findAll);
 
 /**
  * @swagger
@@ -44,50 +44,21 @@ router.get('/', BodegaController.getBodegas);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/BodegaResponseDto'
- *       400:
- *         description: Datos inválidos
+ *               $ref: '#/components/schemas/BodegaDto'
  *       500:
- *         description: Error interno del servidor
+ *         description: Error al crear la bodega
  */
-router.post('/', validateDto(CreateBodegaDto), BodegaController.createBodega);
+router.post('/', validateDto(CreateBodegaDto),BodegaController.create);
 
 /**
  * @swagger
- * /bodegas/{id_bodega}:
- *   get:
- *     summary: Obtener bodega por ID
- *     tags: [Bodegas]
- *     parameters:
- *       - in: path
- *         name: id_bodega
- *         required: true
- *         schema:
- *           type: integer
- *         description: ID de la bodega
- *     responses:
- *       200:
- *         description: Bodega obtenida exitosamente
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/BodegaResponseDto'
- *       404:
- *         description: Bodega no encontrada
- *       500:
- *         description: Error interno del servidor
- */
-router.get('/:id_bodega', BodegaController.getBodegaById);
-
-/**
- * @swagger
- * /bodegas/{id_bodega}:
+ * /bodegas/{id}:
  *   put:
- *     summary: Actualizar bodega existente
+ *     summary: Actualizar una bodega existente
  *     tags: [Bodegas]
  *     parameters:
  *       - in: path
- *         name: id_bodega
+ *         name: id
  *         required: true
  *         schema:
  *           type: integer
@@ -104,74 +75,33 @@ router.get('/:id_bodega', BodegaController.getBodegaById);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/BodegaResponseDto'
+ *               $ref: '#/components/schemas/BodegaDto'
  *       404:
  *         description: Bodega no encontrada
  *       500:
- *         description: Error interno del servidor
+ *         description: Error al actualizar la bodega
  */
-router.put('/:id_bodega', validateDto(UpdateBodegaDto), BodegaController.updateBodega);
+router.put('/:id',validateDto(UpdateBodegaDto),BodegaController.update);
 
 /**
  * @swagger
- * /bodegas/{id_bodega}:
+ * /bodegas/{id}:
  *   delete:
- *     summary: Eliminar bodega (soft delete)
+ *     summary: Eliminar (soft delete) una bodega
  *     tags: [Bodegas]
  *     parameters:
  *       - in: path
- *         name: id_bodega
+ *         name: id
  *         required: true
  *         schema:
  *           type: integer
  *         description: ID de la bodega a eliminar
  *     responses:
  *       200:
- *         description: Bodega eliminada correctamente
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Bodega eliminada correctamente
+ *         description: Bodega eliminada (soft delete)
  *       404:
  *         description: Bodega no encontrada
  *       500:
- *         description: Error interno del servidor
+ *         description: Error al eliminar la bodega
  */
-router.delete('/:id_bodega', BodegaController.deleteBodega);
-
-/**
- * @swagger
- * /bodegas/search:
- *   get:
- *     summary: Buscar bodegas con filtros (nombre, ubicación)
- *     tags: [Bodegas]
- *     parameters:
- *       - in: query
- *         name: name
- *         schema:
- *           type: string
- *         description: Filtro por nombre
- *       - in: query
- *         name: location
- *         schema:
- *           type: string
- *         description: Filtro por ubicación
- *     responses:
- *       200:
- *         description: Resultados de búsqueda de bodegas
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/BodegaResponseDto'
- *       500:
- *         description: Error interno del servidor
- */
-router.get('/search', BodegaController.searchBodegas);
-
-export default router;
+router.delete('/:id', BodegaController.softDelete);

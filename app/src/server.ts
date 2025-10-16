@@ -14,18 +14,18 @@ const PORT = process.env.PORT || 3000;
 
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./docs/swagger";
-import { authRoutes, userRoutes, customerRoutes, addressRoutes, productRoutes, orderRoutes, orderItemRoutes, bodegaRoutes } from './routes';
+import { userRoutes, customerRoutes, addressRoutes, productRoutes, orderRoutes, orderItemRoutes, bodegaRoutes } from './routes';
 
 app.use(express.json());
 
 // // Router
-app.use("/api/auth", authRoutes);
+// app.use("/api/auth", authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/customers', customerRoutes);
 app.use('/api/addresses', addressRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
-app.use('/api/orderitems', orderItemRoutes);
+app.use('/api/order-items', orderItemRoutes);
 app.use('/api/bodegas', bodegaRoutes);
 
 

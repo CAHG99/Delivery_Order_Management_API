@@ -7,6 +7,7 @@ interface BodegaAttributes {
   id_bodega: number;
   name: string;
   location: string;
+  isActive: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -17,6 +18,7 @@ class Bodega extends Model<BodegaAttributes, BodegaCreationAttributes> implement
   public id_bodega!: number;
   public name!: string;
   public location!: string;
+  public isActive!: boolean;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -36,11 +38,16 @@ Bodega.init(
       type: DataTypes.STRING(255),
       allowNull: false,
     },
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
   },
   {
     sequelize,
     tableName: 'bodegas',
     timestamps: true,
+    paranoid: false,
   }
 );
 

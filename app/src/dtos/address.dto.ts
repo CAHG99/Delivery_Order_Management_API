@@ -10,12 +10,13 @@
  * */
 // src/dto/address.dto.ts
 
-import { IsEmail, IsEnum, IsOptional, IsString, MinLength, IsDateString, IsInt } from 'class-validator';
+import { IsEmail, IsEnum, IsOptional, IsString, MinLength, IsInt, IsBoolean } from 'class-validator';
 
 /**
  * Data Transfer Object for creating an address record.
  * @property {number} id_customer - ID of the customer associated with the address.
  * @property {string} address - The address details.
+ * @property {boolean} isActive - Status of the address.
  *
  * @example
  * const dto: CreateAddressDto = {
@@ -28,8 +29,12 @@ export class CreateAddressDto {
     @IsInt()
     id_customer!: number;
 
+    @MinLength(5)
     @IsString()
     address!: string;
+
+    @IsBoolean()
+    isActive!: boolean;
 }
 
 /**
@@ -38,6 +43,7 @@ export class CreateAddressDto {
  * Data Transfer Object for creating an address record.
  * @property {number} id_customer - ID of the customer associated with the address.
  * @property {string} address - The address details.
+ * @property {boolean} isActive - Status of the address.
  *
  * @example
  * const dto: UpdateAddressDto = {
@@ -54,6 +60,10 @@ export class UpdateAddressDto {
     @IsString()
     @IsOptional()
     address?: string;
+
+    @IsBoolean()
+    @IsOptional()
+    isActive?: boolean;
 }
 
 
@@ -62,6 +72,7 @@ export class UpdateAddressDto {
  *
  * @property {number} id_customer - ID of the customer associated with the address.
  * @property {string} address - The address details.
+ * @property {boolean} isActive - Status of the address.
  * @property {Date} createdAt - Timestamp when the record was created.
  * @property {Date} updatedAt - Timestamp when the record was last updated.
  *
@@ -83,9 +94,18 @@ export class AddressResponseDto {
     @IsString()
     address!: string;
 
-    @IsDateString()
-    createdAt!: Date;
+    @IsBoolean()
+    isActive!: boolean;
 
-    @IsDateString()
+    createdAt!: Date;
     updatedAt!: Date;
+
+    constructor(order: any) {
+        this.id_address = order.id;
+        this.id_customer = order.id_customer;
+        this.address = order.address;
+        this.isActive = order.isActive;
+        this.createdAt = order.createdAt;
+        this.updatedAt = order.updatedAt;
+    }
 }

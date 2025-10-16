@@ -1,59 +1,50 @@
 import { Request, Response } from 'express';
-import AddressDao from '../dao/address.dao';
+import { AddressDAO } from '../dao/address.dao';
 import { CreateAddressDto, UpdateAddressDto } from '../dtos/address.dto';
 
-export const createAddress = async (req: Request, res: Response): Promise<Response> => {
-  try {
-    const data: CreateAddressDto = req.body;
-    const newAddress = await AddressDao.create(data);
-    return res.status(201).json(newAddress);
-  } catch (error: any) {
-    return res.status(500).json({ error: error.message });
+export class AddressController {
+  static async create(req: Request, res: Response) {
+    try {
+      const data: CreateAddressDto = req.body;
+      const address = await AddressDAO.createAddress(data);
+      res.status(201).json(address);
+    } catch (error) {
+      res.status(500).json({ message: 'Error creating address', error });
+    }
   }
-};
 
-export const getAddresses = async (_req: Request, res: Response): Promise<Response> => {
-  try {
-    const addresses = await AddressDao.findAll();
-    return res.json(addresses);
-  } catch (error: any) {
-    return res.status(500).json({ error: error.message });
+  static async findByCustomer(req: Request, res: Response) {
+    try {
+      const { id_customer } = req.params;
+      const addresses = await AddressDAO.findByCustomer(Number(id_customer));
+      res.json(addresses);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching addresses', error });
+    }
   }
-};
 
-export const getAddressById = async (req: Request, res: Response): Promise<Response> => {
-  try {
-    const id_address = parseInt(req.params.id_address, 10);
-    const address = await AddressDao.findById(id_address);
-    if (!address) return res.status(404).json({ error: 'Address not found' });
-    return res.json(address);
-  } catch (error: any) {
-    return res.status(500).json({ error: error.message });
+  static async update(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const data: UpdateAddressDto = req.body;
+      const updated = await AddressDAO.updateAddress(Number(id), data);
+
+      if (!updated) return res.status(404).json({ message: 'Address not found' });
+      res.json(updated);
+    } catch (error) {
+      res.status(500).json({ message: 'Error updating address', error });
+    }
   }
-};
 
-export const updateAddress = async (req: Request, res: Response): Promise<Response> => {
-  try {
-    const id_address = parseInt(req.params.id_address, 10);
-    const data: UpdateAddressDto = req.body;
+  static async softDelete(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const deleted = await AddressDAO.softDelete(Number(id));
 
-    const updatedAddress = await AddressDao.update(id_address, data);
-    if (!updatedAddress) return res.status(404).json({ error: 'Address not found' });
-
-    return res.json(updatedAddress);
-  } catch (error: any) {
-    return res.status(500).json({ error: error.message });
+      if (!deleted) return res.status(404).json({ message: 'Address not found' });
+      res.json({ message: 'Address deleted (soft)' });
+    } catch (error) {
+      res.status(500).json({ message: 'Error deleting address', error });
+    }
   }
-};
-
-export const deleteAddress = async (req: Request, res: Response): Promise<Response> => {
-  try {
-    const id_address = parseInt(req.params.id_address, 10);
-    const deleted = await AddressDao.delete(id_address);
-    if (!deleted) return res.status(404).json({ error: 'Address not found' });
-
-    return res.json({ message: 'Address deleted successfully' });
-  } catch (error: any) {
-    return res.status(500).json({ error: error.message });
-  }
-};
+}

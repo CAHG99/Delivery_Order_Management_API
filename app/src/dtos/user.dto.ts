@@ -11,15 +11,20 @@
 
 // src/dto/user.dto.ts
 
-import { IsEmail, IsEnum, IsOptional, IsString, MinLength, IsDateString, IsInt, isString } from 'class-validator';
+import { IsEmail, IsEnum, IsOptional, IsString, MinLength, IsDateString, IsInt, IsBoolean } from 'class-validator';
+
+export enum UserRole {
+  ADMIN = 'admin',
+  ANALISTA = 'analista'
+}
 
 /**
  * Data Transfer Object for creating an access record.
- * @property {string} username - Unique username for login.
  * @property {string} name - Name of the user.
  * @property {string} email - Email of the user.
  * @property {string} password - Password of the user (hashed).
  * @property {string} [role] - Role of the user (e.g., 'admin', 'analista').
+ * @property {boolean} is_active - Status of the user.
  *
  * @example
  * const dto: CreateUserDto = {
@@ -31,9 +36,6 @@ import { IsEmail, IsEnum, IsOptional, IsString, MinLength, IsDateString, IsInt, 
 
 export class CreateUserDto {
     @IsString()
-    username!: string;
-
-    @IsString()
     name!: string;
 
     @IsEmail()
@@ -43,31 +45,22 @@ export class CreateUserDto {
     @MinLength(6)
     password!: string;
 
-    @IsEnum(['admin', 'analista'])
+    @IsEnum(UserRole)
     @IsOptional()
-    role?: 'admin' | 'analista';
-}
+    role?: UserRole;
 
-/**
- * DTO for user login (email + password).
- */
-export class LoginUserDto {
-  @IsEmail()
-  email!: string;
-
-  @IsString()
-  @MinLength(6)
-  password!: string;
+    @IsBoolean()
+    isActive!: boolean;
 }
 
 /**
  * Data Transfer Object for updating an access record.
  *
- * @property {string} [username] - Unique username for login.
  * @property {string} name - Name of the user.
  * @property {string} email - Email of the user.
  * @property {string} password - Password of the user (hashed).
  * @property {string} [role] - Role of the user (e.g., 'admin', 'analista').
+ * @property {boolean} [isActive] - Status of the user.
  *
  * @example
  * const dto: UpdateUserDto = {
@@ -76,10 +69,6 @@ export class LoginUserDto {
  */
 
 export class UpdateUserDto {
-    @IsString()
-    @IsOptional()
-    username?: string;
-
     @IsString()
     @IsOptional()
     name?: string;
@@ -93,9 +82,13 @@ export class UpdateUserDto {
     @IsOptional()
     password?: string;
 
-    @IsEnum(['admin', 'analista'])
+    @IsEnum(UserRole)
     @IsOptional()
-    role?: 'admin' | 'analista';
+    role?: UserRole;
+
+    @IsBoolean()
+    @IsOptional()
+    isActive?: boolean;
 }
 
 
@@ -103,18 +96,16 @@ export class UpdateUserDto {
  * Data Transfer Object that represents the response of an access record.
  *
  * @property {number} id_user - Unique identifier of the user.
- * @property {string} username - Unique username for login.
  * @property {string} name - Name of the user.
  * @property {string} email - Email of the user.
- * @property {string} password - Password of the user (hashed).
  * @property {string} [role] - Role of the user (e.g., 'admin', 'analista').
+ * @property {boolean} isActive - Status of the user.
  * @property {Date} createdAt - Timestamp when the record was created.
  * @property {Date} updatedAt - Timestamp when the record was last updated.
  *
  * @example
  * const User response: UserResponseDto = {
  *  id_user: 1,
- *  username: "ad3",
  *  name: "admin",
  *  email: admin@gmail.com
  *  role: "admin",
@@ -127,20 +118,17 @@ export class UserResponseDto {
     id_user!: number;
 
     @IsString()
-    username!: string;
-
-    @IsString()
     name!: string;
 
     @IsEmail()
     email!: string;
 
-    @IsEnum(['admin', 'analista'])
-    role!: 'admin' | 'analista';
+    @IsEnum(UserRole)
+    role!: UserRole;
 
-    @IsDateString()
+    @IsBoolean()
+    isActive!: boolean;
+
     createdAt!: Date;
-
-    @IsDateString()
     updatedAt!: Date;
 }

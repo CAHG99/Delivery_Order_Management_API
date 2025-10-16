@@ -11,7 +11,7 @@
 
 // src/dto/order_item.dto.ts
 
-import { IsEmail, IsEnum, IsOptional, IsString, MinLength, IsDateString, IsInt } from 'class-validator';
+import { IsEmail, IsEnum, IsOptional, IsString, MinLength, IsDateString, IsInt, IsBoolean,IsNumber } from 'class-validator';
 
 /**
  * Data Transfer Object for creating an order item.
@@ -21,6 +21,7 @@ import { IsEmail, IsEnum, IsOptional, IsString, MinLength, IsDateString, IsInt }
  * @property {number} amount - Quantity of the product ordered.
  * @property {number} price - Price per unit of the product.
  * @property {number} [subtotal] - Subtotal for the order item (amount * price).
+ * @property {boolean} isActive - Status of the order item.
  */
 export class CreateOrderItemDto {
     @IsInt()
@@ -32,12 +33,15 @@ export class CreateOrderItemDto {
     @IsInt()
     amount!: number;
 
-    @IsInt()
+    @IsNumber()
     price!: number;
 
-    @IsInt()
+    @IsNumber()
     @IsOptional()
     subtotal?: number;
+
+    @IsBoolean()
+    isActive!: boolean;
 }
 
 /**
@@ -48,6 +52,7 @@ export class CreateOrderItemDto {
  * @property {number} [amount] - Quantity of the product ordered.
  * @property {number} [price] - Price per unit of the product.
  * @property {number} [subtotal] - Subtotal for the order item (amount * price).
+ * @property {boolean} [isActive] - Status of the order item.
  */
 
 export class UpdateOrderItemDto {
@@ -63,13 +68,17 @@ export class UpdateOrderItemDto {
     @IsOptional()
     amount?: number;
 
-    @IsInt()
+    @IsNumber()
     @IsOptional()
     price?: number;
 
-    @IsInt()
+    @IsNumber()
     @IsOptional()
     subtotal?: number;
+
+    @IsBoolean()
+    @IsOptional()
+    isActive?: boolean;
 }
 
 /**
@@ -81,6 +90,7 @@ export class UpdateOrderItemDto {
  * @property {number} amount - Quantity of the product ordered.
  * @property {number} price - Price per unit of the product.
  * @property {number} subtotal - Subtotal for the order item (amount * price).
+ * @property {boolean} isActive - Status of the order item.
  */
 export class OrderItemResponseDto {
     @IsInt()
@@ -95,9 +105,27 @@ export class OrderItemResponseDto {
     @IsInt()
     amount!: number;
 
-    @IsInt()
+    @IsNumber()
     price!: number;
 
-    @IsInt()
+    @IsNumber()
     subtotal!: number;
+
+    @IsBoolean()
+    isActive!: boolean;
+
+    createdAt!: Date;
+    updatedAt!: Date;
+
+    constructor(order: any) {
+        this.id_order_item = order.id;
+        this.id_order = order.id_order;
+        this.id_product = order.id_product;
+        this.amount = order.amount;
+        this.price = order.price;
+        this.subtotal = order.subtotal;
+        this.isActive = order.isActive;
+        this.createdAt = order.createdAt;
+        this.updatedAt = order.updatedAt;
+    }
 }

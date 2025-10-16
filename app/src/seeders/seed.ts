@@ -21,8 +21,6 @@ const seedData: SeedItem[] = [
 
 export const runSeeders = async () => {
   try {
-    await sequelize.sync({ force: true }); // 🔥 Crea todas las tablas
-    
     for (const { model, file } of seedData) {
       await populateFromCSV(model, file);
     }

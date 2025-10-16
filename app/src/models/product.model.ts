@@ -9,6 +9,7 @@ interface ProductAttributes {
   description: string;
   price: number;
   stock: number;
+  isActive: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -21,6 +22,7 @@ class Product extends Model<ProductAttributes, ProductCreationAttributes> implem
   public description!: string;
   public price!: number;
   public stock!: number;
+  public isActive!: boolean;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -49,11 +51,16 @@ Product.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    }
   },
   {
     sequelize,
     tableName: 'products',
     timestamps: true,
+    paranoid: false,
   }
 );
 

@@ -11,6 +11,7 @@ interface OrderItemAttributes {
   id_product: number;
   amount: number;
   price: number;
+  isActive: boolean;
   subtotal: number;
   createdAt?: Date;
   updatedAt?: Date;
@@ -25,6 +26,7 @@ class OrderItem extends Model<OrderItemAttributes, OrderItemCreationAttributes> 
   public amount!: number;
   public price!: number;
   public subtotal!: number;
+  public isActive!: boolean;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -68,11 +70,16 @@ OrderItem.init(
       allowNull: false,
       defaultValue: 0,
     },
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
   },
   {
     sequelize,
     tableName: 'order_items',
     timestamps: true,
+    paranoid: false,
     hooks: {
       beforeSave: (orderItem: OrderItem) => {
         orderItem.subtotal = orderItem.amount * Number(orderItem.price);

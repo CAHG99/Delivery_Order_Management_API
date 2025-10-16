@@ -1,38 +1,30 @@
 import Address from '../models/address.model';
-import { CreateAddressDto, UpdateAddressDto } from '../dtos/address.dto';
+import { CreateAddressDto, UpdateAddressDto, AddressResponseDto } from '../dtos/address.dto';
 
-class AddressDao {
-  async create(data: CreateAddressDto): Promise<Address> {
-    return await Address.create(data);
+export class AddressDAO {
+  static async createAddress(data: CreateAddressDto): Promise<AddressResponseDto> {
+    const address = await Address.create({ ...data, isActive: true });
+    return new AddressResponseDto(address);
   }
 
-  async findAll(): Promise<Address[]> {
-    return await Address.findAll();
+  static async findByCustomer(id_customer: number): Promise<AddressResponseDto[]> {
+    const addresses = await Address.findAll({ where: { id_customer, isActive: true } });
+    return addresses.map((a) => new AddressResponseDto(a));
   }
 
-  async findById(id_address: number): Promise<Address | null> {
-    return await Address.findByPk(id_address);
+  static async updateAddress(id: number, data: UpdateAddressDto): Promise<AddressResponseDto | null> {
+    const address = await Address.findByPk(id);
+    if (!address || !address.isActive) return null;
+
+    await address.update(data);
+    return new AddressResponseDto(address);
   }
 
-  async update(id_address: number, data: UpdateAddressDto): Promise<Address | null> {
-    const addr = await this.findById(id_address);
-    if (!addr) return null;
+  static async softDelete(id: number): Promise<boolean> {
+    const address = await Address.findByPk(id);
+    if (!address || !address.isActive) return false;
 
-    await addr.update(data);
-    return addr;
-  }
-
-  async delete(id_address: number): Promise<boolean> {
-    const addr = await this.findById(id_address);
-    if (!addr) return false;
-
-    await addr.destroy();
+    await address.update({ isActive: false });
     return true;
   }
-
-  async findByCustomer(id_customer: number): Promise<Address[]> {
-    return await Address.findAll({ where: { id_customer } });
-  }
 }
-
-export default new AddressDao();

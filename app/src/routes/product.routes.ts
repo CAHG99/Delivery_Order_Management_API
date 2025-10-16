@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import * as ProductController from '../controllers/product.controller';
+import {ProductController} from '../controllers/product.controller';
 import { validateDto } from '../middlewares/validateDto.middleware';
 import { authenticate } from '../middlewares/authenticate.middleware';
 import { CreateProductDto, UpdateProductDto } from '../dtos/product.dto';
@@ -20,11 +20,11 @@ const router = Router();
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/ProductResponseDto'
+ *                 $ref: '#/components/schemas/ProductDto'
  *       500:
  *         description: Error interno del servidor
  */
-router.get('/', ProductController.getProducts);
+router.get('/', ProductController.findAll);
 
 /**
  * @swagger
@@ -44,50 +44,21 @@ router.get('/', ProductController.getProducts);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ProductResponseDto'
- *       400:
- *         description: Datos inválidos
+ *               $ref: '#/components/schemas/ProductDto'
  *       500:
- *         description: Error interno del servidor
+ *         description: Error al crear el producto
  */
-router.post('/', validateDto(CreateProductDto), ProductController.createProduct);
+router.post('/',validateDto(CreateProductDto), ProductController.create);
 
 /**
  * @swagger
- * /products/{id_product}:
- *   get:
- *     summary: Obtener producto por ID
- *     tags: [Products]
- *     parameters:
- *       - in: path
- *         name: id_product
- *         required: true
- *         schema:
- *           type: integer
- *         description: ID del producto
- *     responses:
- *       200:
- *         description: Producto obtenido exitosamente
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ProductResponseDto'
- *       404:
- *         description: Producto no encontrado
- *       500:
- *         description: Error interno del servidor
- */
-router.get('/:id_product', ProductController.getProductById);
-
-/**
- * @swagger
- * /products/{id_product}:
+ * /products/{id}:
  *   put:
- *     summary: Actualizar producto existente
+ *     summary: Actualizar un producto existente
  *     tags: [Products]
  *     parameters:
  *       - in: path
- *         name: id_product
+ *         name: id
  *         required: true
  *         schema:
  *           type: integer
@@ -104,43 +75,33 @@ router.get('/:id_product', ProductController.getProductById);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ProductResponseDto'
+ *               $ref: '#/components/schemas/ProductDto'
  *       404:
  *         description: Producto no encontrado
  *       500:
- *         description: Error interno del servidor
+ *         description: Error al actualizar el producto
  */
-router.put('/:id_product', validateDto(UpdateProductDto), ProductController.updateProduct);
+router.put('/:id',validateDto(CreateProductDto), ProductController.update);
 
 /**
  * @swagger
- * /products/{id_product}:
+ * /products/{id}:
  *   delete:
- *     summary: Eliminar producto (soft delete)
+ *     summary: Eliminar (soft delete) un producto
  *     tags: [Products]
  *     parameters:
  *       - in: path
- *         name: id_product
+ *         name: id
  *         required: true
  *         schema:
  *           type: integer
  *         description: ID del producto a eliminar
  *     responses:
  *       200:
- *         description: Producto eliminado correctamente
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Producto eliminado correctamente
+ *         description: Producto eliminado (soft delete)
  *       404:
  *         description: Producto no encontrado
  *       500:
- *         description: Error interno del servidor
+ *         description: Error al eliminar el producto
  */
-router.delete('/:id_product', ProductController.deleteProduct);
-
-export default router;
+router.delete('/:id', ProductController.softDelete);

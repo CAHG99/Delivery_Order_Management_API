@@ -10,11 +10,11 @@ export enum UserRole {
 // Interfaz de atributos del usuario
 interface UserAttributes {
   id_user: number;
-  username: string;
   name: string;
   email: string;
   password: string;
   role: 'admin' | 'analista' 
+  isActive: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -27,11 +27,11 @@ interface UserCreationAttributes
 class User extends Model<UserAttributes, UserCreationAttributes> 
   implements UserAttributes {
   public id_user!: number;
-  public username!: string;
   public name!: string;
   public email!: string;
   public password!: string;
   public role!: 'admin' | 'analista' 
+  public isActive!: boolean;
   
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -50,11 +50,6 @@ User.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    username: {
-      type: DataTypes.STRING(50),
-      allowNull: false,
-      unique: true,
-    },
     name: {
       type: DataTypes.STRING(100),
       allowNull: false,
@@ -72,11 +67,16 @@ User.init(
       type: DataTypes.ENUM('admin', 'analista'),
       defaultValue: 'analista',
     },
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    }
   },
   {
     sequelize,
     tableName: 'users',
     timestamps: true,
+    paranoid: false,
   }
 );
 

@@ -11,7 +11,7 @@
 
 // src/dto/product.dto.ts
 
-import { IsEmail, IsEnum, IsOptional, IsString, MinLength, IsDateString, IsInt } from 'class-validator';
+import { IsEmail, IsEnum, IsOptional, IsString, MinLength, IsDateString, IsInt, IsNumber, IsBoolean, Min } from 'class-validator';
 
 /**
  * Data Transfer Object for creating a product.
@@ -20,6 +20,7 @@ import { IsEmail, IsEnum, IsOptional, IsString, MinLength, IsDateString, IsInt }
  * @property {string} description - Description of the product.
  * @property {number} price - Price of the product.
  * @property {number} stock - Stock quantity of the product.
+ * @property {boolean} isActive - Status of the product.
  */
 export class CreateProductDto {
     @IsString()
@@ -28,11 +29,16 @@ export class CreateProductDto {
     @IsString()
     description!: string;
 
-    @IsInt()
+    @Min(0)
+    @IsNumber()
     price!: number;
 
+    @Min(0)
     @IsInt()
     stock!: number;
+
+    @IsBoolean()
+    isActive!: boolean;
 }
 
 /**
@@ -42,6 +48,7 @@ export class CreateProductDto {
  * @property {string} [description] - Description of the product.
  * @property {number} [price] - Price of the product.
  * @property {number} [stock] - Stock quantity of the product.
+ * @property {boolean} [isActive] - Status of the product.
  */
 export class UpdateProductDto {
     @IsString()
@@ -52,13 +59,17 @@ export class UpdateProductDto {
     @IsOptional()
     description?: string;
 
-    @IsInt()
+    @IsNumber()
     @IsOptional()
     price?: number;
 
     @IsInt()
     @IsOptional()
     stock?: number;
+
+    @IsBoolean()
+    @IsOptional()
+    isActive?: boolean;
 }
 
 /**
@@ -69,6 +80,7 @@ export class UpdateProductDto {
  * @property {string} description - Description of the product.
  * @property {number} price - Price of the product.
  * @property {number} stock - Stock quantity of the product.
+ * @property {boolean} isActive - Status of the product.
  */
 export class ProductResponseDto {
     @IsInt()
@@ -80,9 +92,25 @@ export class ProductResponseDto {
     @IsString()
     description!: string;
 
-    @IsInt()
+    @IsNumber()
     price!: number;
 
     @IsInt()
     stock!: number;
+
+    @IsBoolean()
+    isActive!: boolean;
+
+    createdAt!: Date;
+    updatedAt!: Date;
+
+    constructor(product: any) {
+        this.id_product = product.id;
+        this.name = product.name;
+        this.description = product.description;
+        this.price = product.price;
+        this.stock = product.stock;
+        this.isActive = product.isActive;
+        this.createdAt = product.createdAt;
+}
 }

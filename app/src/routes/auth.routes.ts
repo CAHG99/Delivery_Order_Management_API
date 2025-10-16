@@ -1,6 +1,5 @@
 
 import { Router } from 'express';
-import { CreateUserDto, LoginUserDto, UpdateUserDto } from '../dtos/user.dto'; // DTOs para validación
 import { validateDto } from '../middlewares/validateDto.middleware'; // Validar DTOs
 import { authenticate } from '../middlewares/authenticate.middleware'; // Validar JWT
 import * as AuthController from '../controllers/auth.controller';

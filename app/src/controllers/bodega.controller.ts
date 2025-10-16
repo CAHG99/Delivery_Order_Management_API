@@ -1,73 +1,49 @@
 import { Request, Response } from 'express';
-import BodegaDao from '../dao/bodega.dao';
+import { BodegaDAO } from '../dao/bodega.dao';
 import { CreateBodegaDto, UpdateBodegaDto } from '../dtos/bodega.dto';
 
-export const createBodega = async (req: Request, res: Response): Promise<Response> => {
-  try {
-    const data: CreateBodegaDto = req.body;
-    const newBodega = await BodegaDao.create(data);
-    return res.status(201).json(newBodega);
-  } catch (error: any) {
-    return res.status(500).json({ error: error.message });
+export class BodegaController {
+  static async create(req: Request, res: Response) {
+    try {
+      const data: CreateBodegaDto = req.body;
+      const bodega = await BodegaDAO.createBodega(data);
+      res.status(201).json(bodega);
+    } catch (error) {
+      res.status(500).json({ message: 'Error creating bodega', error });
+    }
   }
-};
 
-export const getBodegas = async (_req: Request, res: Response): Promise<Response> => {
-  try {
-    const bodegas = await BodegaDao.findAll();
-    return res.json(bodegas);
-  } catch (error: any) {
-    return res.status(500).json({ error: error.message });
+  static async findAll(req: Request, res: Response) {
+    try {
+      const bodegas = await BodegaDAO.findAll();
+      res.json(bodegas);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching bodegas', error });
+    }
   }
-};
 
-export const getBodegaById = async (req: Request, res: Response): Promise<Response> => {
-  try {
-    const id_bodega = parseInt(req.params.id_bodega, 10);
-    const bodega = await BodegaDao.findById(id_bodega);
-    if (!bodega) return res.status(404).json({ error: 'Bodega not found' });
-    return res.json(bodega);
-  } catch (error: any) {
-    return res.status(500).json({ error: error.message });
+  static async update(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const data: UpdateBodegaDto = req.body;
+      const updated = await BodegaDAO.updateBodega(Number(id), data);
+
+      if (!updated) return res.status(404).json({ message: 'Bodega not found' });
+      res.json(updated);
+    } catch (error) {
+      res.status(500).json({ message: 'Error updating bodega', error });
+    }
   }
-};
 
-export const updateBodega = async (req: Request, res: Response): Promise<Response> => {
-  try {
-    const id_bodega = parseInt(req.params.id_bodega, 10);
-    const data: UpdateBodegaDto = req.body;
+  static async softDelete(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const deleted = await BodegaDAO.softDelete(Number(id));
 
-    const updatedBodega = await BodegaDao.update(id_bodega, data);
-    if (!updatedBodega) return res.status(404).json({ error: 'Bodega not found' });
-
-    return res.json(updatedBodega);
-  } catch (error: any) {
-    return res.status(500).json({ error: error.message });
+      if (!deleted) return res.status(404).json({ message: 'Bodega not found' });
+      res.json({ message: 'Bodega deleted (soft)' });
+    } catch (error) {
+      res.status(500).json({ message: 'Error deleting bodega', error });
+    }
   }
-};
-
-export const deleteBodega = async (req: Request, res: Response): Promise<Response> => {
-  try {
-    const id_bodega = parseInt(req.params.id_bodega, 10);
-    const deleted = await BodegaDao.delete(id_bodega);
-    if (!deleted) return res.status(404).json({ error: 'Bodega not found' });
-
-    return res.json({ message: 'Bodega deleted successfully' });
-  } catch (error: any) {
-    return res.status(500).json({ error: error.message });
-  }
-};
-
-export const searchBodegas = async (req: Request, res: Response): Promise<Response> => {
-  try {
-    const filters = {
-      name: req.query.name as string | undefined,
-      location: req.query.location as string | undefined,
-    };
-
-    const bodegas = await BodegaDao.search(filters);
-    return res.json(bodegas);
-  } catch (error: any) {
-    return res.status(500).json({ error: error.message });
-  }
-};
+}

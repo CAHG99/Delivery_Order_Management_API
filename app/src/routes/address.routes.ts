@@ -1,51 +1,25 @@
+// src/routes/address.routes.ts
+
 import { Router } from 'express';
-import * as AddressController from '../controllers/address.controller';
+import { AddressController } from '../controllers/address.controller';
+import { CreateAddressDto, UpdateAddressDto } from '../dtos/address.dto';
 import { validateDto } from '../middlewares/validateDto.middleware';
 import { authenticate } from '../middlewares/authenticate.middleware';
-import { CreateAddressDto, UpdateAddressDto } from '../dtos/address.dto';
 
 const router = Router();
 
 /**
  * @swagger
  * /addresses:
- *   get:
- *     summary: Obtener lista de todas las direcciones
- *     tags: [Direcciones]
- *     responses:
- *       200:
- *         description: Lista de direcciones obtenida
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/AddressResponseDto'
- *       500:
- *         description: Error interno del servidor
- */
-router.get('/', AddressController.getAddresses);
-
-/**
- * @swagger
- * /addresses:
  *   post:
  *     summary: Crear una nueva dirección
- *     tags: [Direcciones]
+ *     tags: [Address]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/CreateAddressDto'
- *           example:
- *             country: "Colombia"
- *             department: "Atlántico"
- *             city: "Barranquilla"
- *             postal_code: "080001"
- *             street: "Calle 72"
- *             number: "53-80"
- *             is_active: true
  *     responses:
  *       201:
  *         description: Dirección creada exitosamente
@@ -58,44 +32,44 @@ router.get('/', AddressController.getAddresses);
  *       500:
  *         description: Error interno del servidor
  */
-router.post('/', validateDto(CreateAddressDto), AddressController.createAddress);
+router.post('/', validateDto(CreateAddressDto), AddressController.create);
 
 /**
  * @swagger
- * /addresses/{id_address}:
+ * /addresses/customer/{id_customer}:
  *   get:
- *     summary: Obtener dirección por ID
- *     tags: [Direcciones]
+ *     summary: Obtener direcciones por ID de cliente
+ *     tags: [Address]
  *     parameters:
  *       - in: path
- *         name: id_address
+ *         name: id_customer
  *         required: true
  *         schema:
  *           type: integer
- *         description: ID de la dirección
+ *         description: ID del cliente
  *     responses:
  *       200:
- *         description: Dirección obtenida exitosamente
+ *         description: Direcciones del cliente obtenidas
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/AddressResponseDto'
- *       404:
- *         description: Dirección no encontrada
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/AddressResponseDto'
  *       500:
  *         description: Error interno del servidor
  */
-router.get('/:id_address', AddressController.getAddressById);
+router.get('/customer/:id_customer', AddressController.findByCustomer);
 
 /**
  * @swagger
- * /addresses/{id_address}:
+ * /addresses/{id}:
  *   put:
- *     summary: Actualizar dirección existente
- *     tags: [Direcciones]
+ *     summary: Actualizar una dirección existente
+ *     tags: [Address]
  *     parameters:
  *       - in: path
- *         name: id_address
+ *         name: id
  *         required: true
  *         schema:
  *           type: integer
@@ -118,24 +92,24 @@ router.get('/:id_address', AddressController.getAddressById);
  *       500:
  *         description: Error interno del servidor
  */
-router.put('/:id_address', validateDto(UpdateAddressDto), AddressController.updateAddress);
+router.put('/:id', validateDto(UpdateAddressDto), AddressController.update);
 
 /**
  * @swagger
- * /addresses/{id_address}:
+ * /addresses/{id}:
  *   delete:
  *     summary: Eliminar dirección (soft delete)
- *     tags: [Direcciones]
+ *     tags: [Address]
  *     parameters:
  *       - in: path
- *         name: id_address
+ *         name: id
  *         required: true
  *         schema:
  *           type: integer
  *         description: ID de la dirección a eliminar
  *     responses:
  *       200:
- *         description: Dirección eliminada correctamente
+ *         description: Dirección eliminada correctamente (soft)
  *         content:
  *           application/json:
  *             schema:
@@ -149,41 +123,6 @@ router.put('/:id_address', validateDto(UpdateAddressDto), AddressController.upda
  *       500:
  *         description: Error interno del servidor
  */
-router.delete('/:id_address', AddressController.deleteAddress);
-
-/**
- * @swagger
- * /addresses/search:
- *   get:
- *     summary: Buscar direcciones con filtros (ciudad, código postal, país)
- *     tags: [Direcciones]
- *     parameters:
- *       - in: query
- *         name: city
- *         schema:
- *           type: string
- *         description: Filtro por ciudad
- *       - in: query
- *         name: postalCode
- *         schema:
- *           type: string
- *         description: Filtro por código postal
- *       - in: query
- *         name: country
- *         schema:
- *           type: string
- *         description: Filtro por país
- *     responses:
- *       200:
- *         description: Resultados de búsqueda de direcciones
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/AddressResponseDto'
- *       500:
- *         description: Error interno del servidor
- */
+router.delete('/:id', AddressController.softDelete);
 
 export default router;

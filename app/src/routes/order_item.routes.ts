@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import * as OrderItemController from '../controllers/order_item.controller';
+import { OrderItemController } from '../controllers/order_item.controller';
 import { validateDto } from '../middlewares/validateDto.middleware';
 import { authenticate } from '../middlewares/authenticate.middleware';
 import { CreateOrderItemDto, UpdateOrderItemDto } from '../dtos/order_item.dto';
@@ -8,27 +8,14 @@ const router = Router();
 
 /**
  * @swagger
- * /orderitems:
- *   get:
- *     summary: Obtener lista de todos los ítems de órdenes
- *     tags: [OrderItems]
- *     responses:
- *       200:
- *         description: Lista de ítems obtenida
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/OrderItemResponseDto'
- *       500:
- *         description: Error interno del servidor
+ * tags:
+ *   name: OrderItems
+ *   description: Gestión de los ítems de las órdenes
  */
-router.get('/', OrderItemController.getOrderItems);
 
 /**
  * @swagger
- * /orderitems:
+ * /order-items:
  *   post:
  *     summary: Crear un nuevo ítem de orden
  *     tags: [OrderItems]
@@ -40,7 +27,7 @@ router.get('/', OrderItemController.getOrderItems);
  *             $ref: '#/components/schemas/CreateOrderItemDto'
  *     responses:
  *       201:
- *         description: Ítem de orden creado exitosamente
+ *         description: Ítem creado exitosamente
  *         content:
  *           application/json:
  *             schema:
@@ -50,48 +37,50 @@ router.get('/', OrderItemController.getOrderItems);
  *       500:
  *         description: Error interno del servidor
  */
-router.post('/', validateDto(CreateOrderItemDto), OrderItemController.createOrderItem);
+router.post('/', validateDto(CreateOrderItemDto), OrderItemController.create);
 
 /**
  * @swagger
- * /orderitems/{id_order_item}:
+ * /order-items/order/{id_order}:
  *   get:
- *     summary: Obtener ítem de orden por ID
+ *     summary: Obtener ítems activos de una orden específica
  *     tags: [OrderItems]
  *     parameters:
  *       - in: path
- *         name: id_order_item
+ *         name: id_order
  *         required: true
  *         schema:
  *           type: integer
- *         description: ID del ítem de orden
+ *         description: ID de la orden
  *     responses:
  *       200:
- *         description: Ítem de orden obtenido exitosamente
+ *         description: Lista de ítems obtenida exitosamente
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/OrderItemResponseDto'
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/OrderItemResponseDto'
  *       404:
- *         description: Ítem no encontrado
+ *         description: No se encontraron ítems o la orden no existe
  *       500:
  *         description: Error interno del servidor
  */
-router.get('/:id_order_item', OrderItemController.getOrderItemById);
+router.get('/order/:id_order', OrderItemController.getByOrder);
 
 /**
  * @swagger
- * /orderitems/{id_order_item}:
+ * /order-items/{id}:
  *   put:
- *     summary: Actualizar ítem de orden existente
+ *     summary: Actualizar un ítem de orden existente
  *     tags: [OrderItems]
  *     parameters:
  *       - in: path
- *         name: id_order_item
+ *         name: id
  *         required: true
  *         schema:
  *           type: integer
- *         description: ID del ítem de orden a actualizar
+ *         description: ID del ítem a actualizar
  *     requestBody:
  *       required: true
  *       content:
@@ -100,7 +89,7 @@ router.get('/:id_order_item', OrderItemController.getOrderItemById);
  *             $ref: '#/components/schemas/UpdateOrderItemDto'
  *     responses:
  *       200:
- *         description: Ítem de orden actualizado exitosamente
+ *         description: Ítem actualizado correctamente
  *         content:
  *           application/json:
  *             schema:
@@ -110,24 +99,24 @@ router.get('/:id_order_item', OrderItemController.getOrderItemById);
  *       500:
  *         description: Error interno del servidor
  */
-router.put('/:id_order_item', validateDto(UpdateOrderItemDto), OrderItemController.updateOrderItem);
+router.put('/:id', validateDto(UpdateOrderItemDto), OrderItemController.update);
 
 /**
  * @swagger
- * /orderitems/{id_orderitem}:
+ * /order-items/{id}:
  *   delete:
- *     summary: Eliminar ítem de orden (soft delete)
+ *     summary: Eliminar ítem (soft delete)
  *     tags: [OrderItems]
  *     parameters:
  *       - in: path
- *         name: id_order_item
+ *         name: id
  *         required: true
  *         schema:
  *           type: integer
- *         description: ID del ítem de orden a eliminar
+ *         description: ID del ítem a eliminar
  *     responses:
  *       200:
- *         description: Ítem de orden eliminado correctamente
+ *         description: Ítem eliminado correctamente (soft delete)
  *         content:
  *           application/json:
  *             schema:
@@ -135,12 +124,12 @@ router.put('/:id_order_item', validateDto(UpdateOrderItemDto), OrderItemControll
  *               properties:
  *                 message:
  *                   type: string
- *                   example: Ítem de orden eliminado correctamente
+ *                   example: Ítem eliminado correctamente
  *       404:
  *         description: Ítem no encontrado
  *       500:
  *         description: Error interno del servidor
  */
-router.delete('/:id_order_item', OrderItemController.deleteOrderItem);
+router.delete('/:id', OrderItemController.softDelete);
 
 export default router;

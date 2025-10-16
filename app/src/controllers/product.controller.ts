@@ -1,73 +1,49 @@
 import { Request, Response } from 'express';
-import ProductDao from '../dao/product.dao';
+import { ProductDAO } from '../dao/product.dao';
 import { CreateProductDto, UpdateProductDto } from '../dtos/product.dto';
 
-export const createProduct = async (req: Request, res: Response): Promise<Response> => {
-  try {
-    const data: CreateProductDto = req.body;
-    const newProduct = await ProductDao.create(data);
-    return res.status(201).json(newProduct);
-  } catch (error: any) {
-    return res.status(500).json({ error: error.message });
+export class ProductController {
+  static async create(req: Request, res: Response) {
+    try {
+      const data: CreateProductDto = req.body;
+      const product = await ProductDAO.createProduct(data);
+      res.status(201).json(product);
+    } catch (error) {
+      res.status(500).json({ message: 'Error creating product', error });
+    }
   }
-};
 
-export const getProducts = async (_req: Request, res: Response): Promise<Response> => {
-  try {
-    const products = await ProductDao.findAll();
-    return res.json(products);
-  } catch (error: any) {
-    return res.status(500).json({ error: error.message });
+  static async findAll(req: Request, res: Response) {
+    try {
+      const products = await ProductDAO.findAll();
+      res.json(products);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching products', error });
+    }
   }
-};
 
-export const getProductById = async (req: Request, res: Response): Promise<Response> => {
-  try {
-    const id_product = parseInt(req.params.id_product, 10);
-    const product = await ProductDao.findById(id_product);
-    if (!product) return res.status(404).json({ error: 'Product not found' });
-    return res.json(product);
-  } catch (error: any) {
-    return res.status(500).json({ error: error.message });
+  static async update(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const data: UpdateProductDto = req.body;
+      const updated = await ProductDAO.updateProduct(Number(id), data);
+
+      if (!updated) return res.status(404).json({ message: 'Product not found' });
+      res.json(updated);
+    } catch (error) {
+      res.status(500).json({ message: 'Error updating product', error });
+    }
   }
-};
 
-export const updateProduct = async (req: Request, res: Response): Promise<Response> => {
-  try {
-    const id_product = parseInt(req.params.id_product, 10);
-    const data: UpdateProductDto = req.body;
+  static async softDelete(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const deleted = await ProductDAO.softDelete(Number(id));
 
-    const updatedProduct = await ProductDao.update(id_product, data);
-    if (!updatedProduct) return res.status(404).json({ error: 'Product not found' });
-
-    return res.json(updatedProduct);
-  } catch (error: any) {
-    return res.status(500).json({ error: error.message });
+      if (!deleted) return res.status(404).json({ message: 'Product not found' });
+      res.json({ message: 'Product deleted (soft)' });
+    } catch (error) {
+      res.status(500).json({ message: 'Error deleting product', error });
+    }
   }
-};
-
-export const deleteProduct = async (req: Request, res: Response): Promise<Response> => {
-  try {
-    const id_product = parseInt(req.params.id_product, 10);
-    const deleted = await ProductDao.delete(id_product);
-    if (!deleted) return res.status(404).json({ error: 'Product not found' });
-
-    return res.json({ message: 'Product deleted successfully' });
-  } catch (error: any) {
-    return res.status(500).json({ error: error.message });
-  }
-};
-
-export const searchProducts = async (req: Request, res: Response): Promise<Response> => {
-  try {
-    const filters = {
-      name: req.query.name as string | undefined,
-      description: req.query.description as string | undefined,
-    };
-
-    const products = await ProductDao.search(filters);
-    return res.json(products);
-  } catch (error: any) {
-    return res.status(500).json({ error: error.message });
-  }
-};
+}

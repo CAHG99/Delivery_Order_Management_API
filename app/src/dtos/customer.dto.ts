@@ -11,7 +11,7 @@
 
 // src/dto/customer.dto.ts
 
-import { IsEmail, IsEnum, IsOptional, IsString, MinLength, IsDateString, IsInt } from 'class-validator';
+import { IsEmail, IsEnum, IsOptional, IsString, MinLength, IsDateString, IsInt, IsBoolean } from 'class-validator';
 
 /**
  * Data Transfer Object for creating a customer.
@@ -20,6 +20,7 @@ import { IsEmail, IsEnum, IsOptional, IsString, MinLength, IsDateString, IsInt }
  * @property {string} fullname - Full name of the customer.
  * @property {string} phone - Phone number of the customer.
  * @property {string} email - Email address of the customer.
+ * @property {boolean} isActive - Status of the customer.
  */
 export class CreateCustomerDto {
     @IsString()
@@ -33,6 +34,9 @@ export class CreateCustomerDto {
 
     @IsEmail()
     email!: string;
+
+    @IsBoolean()
+    isActive!: boolean;
 }
 
 /**
@@ -42,6 +46,7 @@ export class CreateCustomerDto {
  * @property {string} [fullname] - Full name of the customer.
  * @property {string} [phone] - Phone number of the customer.
  * @property {string} [email] - Email address of the customer.
+ * @property {boolean} [isActive] - Status of the customer.
  */
 
 export class UpdateCustomerDto {
@@ -60,6 +65,10 @@ export class UpdateCustomerDto {
     @IsEmail()
     @IsOptional()
     email?: string;
+
+    @IsBoolean()
+    @IsOptional()
+    isActive?: boolean;
 }
 
 /**
@@ -70,6 +79,7 @@ export class UpdateCustomerDto {
  * @property {string} fullname - Full name of the customer.
  * @property {string} phone - Phone number of the customer.
  * @property {string} email - Email address of the customer.
+ * @property {boolean} isActive - Status of the customer.
  */
 export class CustomerResponseDto {
     @IsInt()
@@ -78,12 +88,31 @@ export class CustomerResponseDto {
     @IsString()
     cedula!: string;
 
+    @MinLength(5)
     @IsString()
     fullname!: string;
 
+    @MinLength(7)
     @IsString()
     phone!: string;
 
     @IsString()
     email!: string;
+
+    @IsBoolean()
+    isActive!: boolean;
+
+    createdAt!: Date;
+    updatedAt!: Date;
+
+    constructor(order: any) {
+        this.id_customer = order.id;
+        this.cedula = order.cedula;
+        this.fullname = order.fullname;
+        this.phone = order.phone;
+        this.email = order.email;
+        this.isActive = order.isActive;
+        this.createdAt = order.createdAt;
+        this.updatedAt = order.updatedAt;
+    }
 }

@@ -1,38 +1,30 @@
 import OrderItem from '../models/order_item.model';
-import { CreateOrderItemDto, UpdateOrderItemDto } from '../dtos/order_item.dto';
+import { CreateOrderItemDto, UpdateOrderItemDto, OrderItemResponseDto } from '../dtos/order_item.dto';
 
-class OrderItemDao {
-  async create(data: CreateOrderItemDto): Promise<OrderItem> {
-    return await OrderItem.create(data);
+export class OrderItemDAO {
+  static async createItem(data: CreateOrderItemDto): Promise<OrderItemResponseDto> {
+    const item = await OrderItem.create({ ...data, isActive: true });
+    return new OrderItemResponseDto(item);
   }
 
-  async findAll(): Promise<OrderItem[]> {
-    return await OrderItem.findAll();
+  static async findByOrder(id_order: number): Promise<OrderItemResponseDto[]> {
+    const items = await OrderItem.findAll({ where: { id_order, isActive: true } });
+    return items.map((i) => new OrderItemResponseDto(i));
   }
 
-  async findById(id_order_item: number): Promise<OrderItem | null> {
-    return await OrderItem.findByPk(id_order_item);
-  }
-
-  async update(id_order_item: number, data: UpdateOrderItemDto): Promise<OrderItem | null> {
-    const item = await this.findById(id_order_item);
-    if (!item) return null;
+  static async updateItem(id: number, data: UpdateOrderItemDto): Promise<OrderItemResponseDto | null> {
+    const item = await OrderItem.findByPk(id);
+    if (!item || !item.isActive) return null;
 
     await item.update(data);
-    return item;
+    return new OrderItemResponseDto(item);
   }
 
-  async delete(id_order_item: number): Promise<boolean> {
-    const item = await this.findById(id_order_item);
-    if (!item) return false;
+  static async softDelete(id: number): Promise<boolean> {
+    const item = await OrderItem.findByPk(id);
+    if (!item || !item.isActive) return false;
 
-    await item.destroy();
+    await item.update({ isActive: false });
     return true;
   }
-
-  async findByOrder(id_order: number): Promise<OrderItem[]> {
-    return await OrderItem.findAll({ where: { id_order } });
-  }
 }
-
-export default new OrderItemDao();

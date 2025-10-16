@@ -1,10 +1,17 @@
 import { Router } from 'express';
-import * as OrderController from '../controllers/order.controller';
+import { OrderController } from '../controllers/order.controller';
 import { validateDto } from '../middlewares/validateDto.middleware';
 import { authenticate } from '../middlewares/authenticate.middleware';
 import { CreateOrderDto, UpdateOrderDto } from '../dtos/order.dto';
 
 const router = Router();
+
+/**
+ * @swagger
+ * tags:
+ *   name: Orders
+ *   description: Operaciones relacionadas con órdenes
+ */
 
 /**
  * @swagger
@@ -20,11 +27,11 @@ const router = Router();
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/OrderResponseDto'
+ *                 $ref: '#/components/schemas/OrderDto'
  *       500:
  *         description: Error interno del servidor
  */
-router.get('/', OrderController.getOrders);
+router.get('/', OrderController.getAll);
 
 /**
  * @swagger
@@ -44,13 +51,13 @@ router.get('/', OrderController.getOrders);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/OrderResponseDto'
+ *               $ref: '#/components/schemas/OrderDto'
  *       400:
  *         description: Datos inválidos
  *       500:
  *         description: Error interno del servidor
  */
-router.post('/', validateDto(CreateOrderDto), OrderController.createOrder);
+router.post('/', validateDto(CreateOrderDto), OrderController.create);
 
 /**
  * @swagger
@@ -71,19 +78,19 @@ router.post('/', validateDto(CreateOrderDto), OrderController.createOrder);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/OrderResponseDto'
+ *               $ref: '#/components/schemas/OrderDto'
  *       404:
  *         description: Orden no encontrada
  *       500:
  *         description: Error interno del servidor
  */
-router.get('/:id_order', OrderController.getOrderById);
+router.get('/:id_order', OrderController.findByCustomer);
 
 /**
  * @swagger
  * /orders/{id_order}:
  *   put:
- *     summary: Actualizar orden existente
+ *     summary: Actualizar una orden existente
  *     tags: [Orders]
  *     parameters:
  *       - in: path
@@ -110,13 +117,13 @@ router.get('/:id_order', OrderController.getOrderById);
  *       500:
  *         description: Error interno del servidor
  */
-router.put('/:id_order', validateDto(UpdateOrderDto), OrderController.updateOrder);
+router.put('/:id_order', validateDto(UpdateOrderDto), OrderController.update);
 
 /**
  * @swagger
  * /orders/{id_order}:
  *   delete:
- *     summary: Eliminar orden (soft delete)
+ *     summary: Eliminar una orden (soft delete)
  *     tags: [Orders]
  *     parameters:
  *       - in: path
@@ -141,6 +148,6 @@ router.put('/:id_order', validateDto(UpdateOrderDto), OrderController.updateOrde
  *       500:
  *         description: Error interno del servidor
  */
-router.delete('/:id_order', OrderController.deleteOrder);
+router.delete('/:id_order', OrderController.softDelete);
 
 export default router;

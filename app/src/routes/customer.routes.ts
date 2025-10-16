@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import * as CustomerController from '../controllers/customer.controller';
+import {CustomerController} from '../controllers/customer.controller';
 import { validateDto } from '../middlewares/validateDto.middleware';
 import { authenticate } from '../middlewares/authenticate.middleware';
 import { CreateCustomerDto, UpdateCustomerDto } from '../dtos/customer.dto';
@@ -11,7 +11,7 @@ const router = Router();
  * /customers:
  *   get:
  *     summary: Obtener lista de todos los clientes
- *     tags: [Clientes]
+ *     tags: [Customers]
  *     responses:
  *       200:
  *         description: Lista de clientes obtenida
@@ -20,18 +20,18 @@ const router = Router();
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/CustomerResponseDto'
+ *                 $ref: '#/components/schemas/CustomerDto'
  *       500:
  *         description: Error interno del servidor
  */
-router.get('/', CustomerController.getCustomers);
+router.get('/', CustomerController.findAll);
 
 /**
  * @swagger
  * /customers:
  *   post:
  *     summary: Crear un nuevo cliente
- *     tags: [Clientes]
+ *     tags: [Customers]
  *     requestBody:
  *       required: true
  *       content:
@@ -44,50 +44,21 @@ router.get('/', CustomerController.getCustomers);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/CustomerResponseDto'
- *       400:
- *         description: Datos inválidos
+ *               $ref: '#/components/schemas/CustomerDto'
  *       500:
- *         description: Error interno del servidor
+ *         description: Error al crear el cliente
  */
-router.post('/', validateDto(CreateCustomerDto), CustomerController.createCustomer);
+router.post('/',validateDto(UpdateCustomerDto), CustomerController.create);
 
 /**
  * @swagger
- * /customers/{id_customer}:
- *   get:
- *     summary: Obtener cliente por ID
- *     tags: [Clientes]
- *     parameters:
- *       - in: path
- *         name: id_customer
- *         required: true
- *         schema:
- *           type: integer
- *         description: ID del cliente
- *     responses:
- *       200:
- *         description: Cliente obtenido exitosamente
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/CustomerResponseDto'
- *       404:
- *         description: Cliente no encontrado
- *       500:
- *         description: Error interno del servidor
- */
-router.get('/:id_customer', CustomerController.getCustomerById);
-
-/**
- * @swagger
- * /customers/{id_customer}:
+ * /customers/{id}:
  *   put:
- *     summary: Actualizar cliente existente
- *     tags: [Clientes]
+ *     summary: Actualizar un cliente existente
+ *     tags: [Customers]
  *     parameters:
  *       - in: path
- *         name: id_customer
+ *         name: id
  *         required: true
  *         schema:
  *           type: integer
@@ -104,43 +75,34 @@ router.get('/:id_customer', CustomerController.getCustomerById);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/CustomerResponseDto'
+ *               $ref: '#/components/schemas/CustomerDto'
  *       404:
  *         description: Cliente no encontrado
  *       500:
- *         description: Error interno del servidor
+ *         description: Error al actualizar el cliente
  */
-router.put('/:id_customer', validateDto(UpdateCustomerDto), CustomerController.updateCustomer);
+router.put('/:id',validateDto(UpdateCustomerDto), CustomerController.update);
 
 /**
  * @swagger
- * /customers/{id_customer}:
+ * /customers/{id}:
  *   delete:
- *     summary: Eliminar cliente (soft delete)
- *     tags: [Clientes]
+ *     summary: Eliminar (soft delete) un cliente
+ *     tags: [Customers]
  *     parameters:
  *       - in: path
- *         name: id_customer
+ *         name: id
  *         required: true
  *         schema:
  *           type: integer
  *         description: ID del cliente a eliminar
  *     responses:
  *       200:
- *         description: Cliente eliminado correctamente
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Cliente eliminado correctamente
+ *         description: Cliente eliminado (soft delete)
  *       404:
  *         description: Cliente no encontrado
  *       500:
- *         description: Error interno del servidor
+ *         description: Error al eliminar el cliente
  */
-router.delete('/:id_customer', CustomerController.deleteCustomer);
+router.delete('/:id', CustomerController.softDelete);
 
-export default router;

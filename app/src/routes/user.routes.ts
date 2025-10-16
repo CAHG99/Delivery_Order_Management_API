@@ -4,7 +4,7 @@ import { Router } from 'express';
 import * as UserController from '../controllers/user.controller';
 import { validateDto } from '../middlewares/validateDto.middleware'; // Validar DTOs
 import { authenticate } from '../middlewares/authenticate.middleware'; // Validar JWT
-import { CreateUserDto, LoginUserDto, UpdateUserDto } from '../dtos/user.dto'; // DTOs para validación
+import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto'; // DTOs para validación
 
 const router = Router();
 
@@ -22,7 +22,7 @@ const router = Router();
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/UserResponseDto'
+ *                 $ref: '#/components/schemas/UserDto'
  *       500:
  *         description: Error interno del servidor
 */
@@ -45,13 +45,13 @@ router.get('/', UserController.getUsers);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/UserResponseDto'
+ *               $ref: '#/components/schemas/UserDto'
  *       400:
  *         description: Datos inválidos
  *       500:
  *         description: Error interno del servidor
  */
-router.post('/', validateDto(CreateUserDto), UserController.createUser);
+router.post('/', authenticate, validateDto(CreateUserDto), UserController.createUser);
 /**
  * @swagger
  * /users/{id_user}:
@@ -71,13 +71,13 @@ router.post('/', validateDto(CreateUserDto), UserController.createUser);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/UserResponseDto'
+ *               $ref: '#/components/schemas/UserDto'
  *       404:
  *         description: Usuario no encontrado
  *       500:
  *         description: Error interno del servidor
  */
-router.get('/:id_user', UserController.getUserById);
+router.get('/:id_user', authenticate, UserController.getUserById);
 /**
  * @swagger
  * /users/{id_user}:
@@ -103,13 +103,13 @@ router.get('/:id_user', UserController.getUserById);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/UserResponseDto'
+ *               $ref: '#/components/schemas/UserDto'
  *       404:
  *         description: Usuario no encontrado
  *       500:
  *         description: Error interno del servidor
  */
-router.put('/:id_user', validateDto(UpdateUserDto), UserController.updateUser);
+router.put('/:id_user', authenticate, validateDto(UpdateUserDto), UserController.updateUser);
 /**
  * @swagger
  * /users/{id_user}:
@@ -139,7 +139,7 @@ router.put('/:id_user', validateDto(UpdateUserDto), UserController.updateUser);
  *       500:
  *         description: Error interno del servidor
  */
-router.delete('/:id_user', UserController.deleteUser);
+router.delete('/:id_user', authenticate, UserController.deleteUser);
 /**
  * @swagger
  * /users/search:
@@ -170,10 +170,10 @@ router.delete('/:id_user', UserController.deleteUser);
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/UserResponseDto'
+ *                 $ref: '#/components/schemas/UserDto'
  *       500:
  *         description: Error interno del servidor
 */
-router.get('/search', UserController.searchUsers);
+router.get('/search', authenticate, UserController.searchUsers);
 
 export default router;

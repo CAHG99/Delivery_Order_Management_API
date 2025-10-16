@@ -1,6 +1,6 @@
-id_bodega,name,location
-1,Bodega Quito Norte,Av. Galo Plaza Lasso
-2,Bodega Guayaquil Sur,Av. 25 de Julio
-3,Bodega Cuenca Centro,Calle Larga
-4,Bodega Loja Centro,Avenida Universitaria
-5,Bodega Ambato,Norte Industrial
+id_bodega,name,location,isActive
+1,Bodega Quito Norte,Av. Galo Plaza Lasso,true
+2,Bodega Guayaquil Sur,Av. 25 de Julio,true
+3,Bodega Cuenca Centro,Calle Larga,true
+4,Bodega Loja Centro,Avenida Universitaria,true
+5,Bodega Ambato,Norte Industrial,true

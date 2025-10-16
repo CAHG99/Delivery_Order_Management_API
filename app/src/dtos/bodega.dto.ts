@@ -11,20 +11,26 @@
 
 // src/dto/bodega.dto.ts
 
-import {IsEnum, IsOptional, IsString, IsInt } from 'class-validator';
+import {IsEnum, IsOptional, IsString, IsInt, IsBoolean, MinLength } from 'class-validator';
 
 /**
  * Data Transfer Object for creating a bodega.
  *
  * @property {string} name - Name of the bodega.
  * @property {string} location - Location of the bodega.
+ * @property {boolean} isActive - Status of the bodega.
  */
 export class CreateBodegaDto {
     @IsString()
+    @MinLength(3)
     name!: string;
 
     @IsString()
+    @MinLength(3)
     location!: string;
+
+    @IsBoolean()
+    isActive!: boolean;
 }
 
 /**
@@ -32,6 +38,7 @@ export class CreateBodegaDto {
  *
  * @property {string} [name] - Name of the bodega.
  * @property {string} [location] - Location of the bodega.
+ * @property {boolean} [isActive] - Status of the bodega.
  */
 export class UpdateBodegaDto {
     @IsString()
@@ -41,6 +48,10 @@ export class UpdateBodegaDto {
     @IsString()
     @IsOptional()
     location?: string;
+
+    @IsBoolean()
+    @IsOptional()
+    isActive?: boolean;
 }
 
 /**
@@ -49,6 +60,7 @@ export class UpdateBodegaDto {
  * @property {number} id_bodega - Unique identifier of the bodega.
  * @property {string} name - Name of the bodega.
  * @property {string} location - Location of the bodega.
+ * @property {boolean} isActive - Status of the bodega.
  */
 
 export class BodegaResponseDto {
@@ -61,4 +73,18 @@ export class BodegaResponseDto {
     @IsString()
     location!: string;
 
+    @IsBoolean()
+    isActive!: boolean;
+
+    createdAt!: Date;
+    updatedAt!: Date;
+
+    constructor(order: any) {
+        this.id_bodega = order.id;
+        this.name = order.name;
+        this.location = order.location;
+        this.isActive = order.isActive;
+        this.createdAt = order.createdAt;
+        this.updatedAt = order.updatedAt;
+    }
 }

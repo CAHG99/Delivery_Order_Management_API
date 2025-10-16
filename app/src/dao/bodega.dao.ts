@@ -1,42 +1,31 @@
 import Bodega from '../models/bodega.model';
-import { Op } from 'sequelize';
-import { CreateBodegaDto, UpdateBodegaDto } from '../dtos/bodega.dto';
+import { CreateBodegaDto, UpdateBodegaDto, BodegaResponseDto } from '../dtos/bodega.dto';
 
-class BodegaDao {
-  async create(data: CreateBodegaDto): Promise<Bodega> {
-    return await Bodega.create(data);
+export class BodegaDAO {
+  static async createBodega(data: CreateBodegaDto): Promise<BodegaResponseDto> {
+    const bodega = await Bodega.create({ ...data, isActive: true });
+    return new BodegaResponseDto(bodega);
   }
 
-  async findAll(): Promise<Bodega[]> {
-    return await Bodega.findAll();
+  static async findAll(): Promise<BodegaResponseDto[]> {
+    const bodegas = await Bodega.findAll({ where: { isActive: true } });
+    return bodegas.map((b) => new BodegaResponseDto(b));
   }
 
-  async findById(id_bodega: number): Promise<Bodega | null> {
-    return await Bodega.findByPk(id_bodega);
-  }
-
-  async update(id_bodega: number, data: UpdateBodegaDto): Promise<Bodega | null> {
-    const bodega = await this.findById(id_bodega);
-    if (!bodega) return null;
+  static async updateBodega(id: number, data: UpdateBodegaDto): Promise<BodegaResponseDto | null> {
+    const bodega = await Bodega.findByPk(id);
+    if (!bodega || !bodega.isActive) return null;
 
     await bodega.update(data);
-    return bodega;
+    return new BodegaResponseDto(bodega);
   }
 
-  async delete(id_bodega: number): Promise<boolean> {
-    const bodega = await this.findById(id_bodega);
-    if (!bodega) return false;
+  static async softDelete(id: number): Promise<boolean> {
+    const bodega = await Bodega.findByPk(id);
+    if (!bodega || !bodega.isActive) return false;
 
-    await bodega.destroy();
+    await bodega.update({ isActive: false });
     return true;
-  }
-
-  async search(filters: Partial<{ name: string }>): Promise<Bodega[]> {
-    const where: any = {};
-    if (filters.name) where.name = { [Op.iLike]: `%${filters.name}%` };
-
-    return await Bodega.findAll({ where });
   }
 }
 
-export default new BodegaDao();

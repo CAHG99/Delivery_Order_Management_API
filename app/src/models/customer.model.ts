@@ -7,6 +7,7 @@ interface CustomerAttributes {
   fullname: string;
   phone: string;
   email: string;
+  isActive: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -19,6 +20,7 @@ class Customer extends Model<CustomerAttributes, CustomerCreationAttributes> imp
   public fullname!: string;
   public phone!: string;
   public email!: string;
+  public isActive!: boolean;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -48,11 +50,16 @@ Customer.init(
       allowNull: false,
       unique: true,
     },
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
   },
   {
     sequelize,
     tableName: 'customers',
     timestamps: true,
+    paranoid: false, 
   }
 );
 
