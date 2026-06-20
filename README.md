@@ -146,9 +146,6 @@ _(Adjust URL according to your configuration)_
     JWT_REFRESH_EXPIRES_IN=
 
     PUBLIC_KEY=
-
     PRIVATE_KEY=
-    KMP9HpS99pbr/+TX+m9wrDc=
-    -----END PRIVATE KEY-----"
 ```
 
