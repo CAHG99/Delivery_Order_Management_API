@@ -148,8 +148,6 @@ _(Adjust URL according to your configuration)_
     PUBLIC_KEY=
 
     PRIVATE_KEY=
-    q2g049122iKM3YwCaxnZ4XIOqSGBwMZUZ+QZXvqvT+h727MoFEvXx23x7rYDArJ4
-    y7P04r827QnfDybND3Hct2QYdWHdraJ3i/vGXDt60Dm5hLnioITlO5wsUqclUjLA
     KMP9HpS99pbr/+TX+m9wrDc=
     -----END PRIVATE KEY-----"
 ```
